@@ -25,12 +25,37 @@ public class Range {
         this.to = to;
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%.4f, %.4f]", from, to);
+    }
+
     public double getLength() {
         return to - from;
     }
 
     public boolean isInside(double number) {
         return from <= number && number <= to;
+    }
+
+    public Range getIntersection(Range range) {
+        if (to <= range.from || from >= range.to) {
+            return null;
+        }
+
+        if (from <= range.from) {
+            if (to <= range.to) {
+                return new Range(range.from, to);
+            }
+
+            return range;
+        }
+
+        if (to > range.to) {
+            return new Range(from, range.to);
+        }
+
+        return this;
     }
 
     private static void displayMessageAboutRangeWithNumber(Range range, double number) {
@@ -43,13 +68,19 @@ public class Range {
     }
 
     public static void main(String[] args) {
-        Range range = new Range(1, 5.7);
+        Range range1 = new Range(1, 5.7);
 
-        displayMessageAboutRangeWithNumber(range, 0);
+        displayMessageAboutRangeWithNumber(range1, 0);
 
-        range.setFrom(-3.3333);
-        range.setTo(21.3333);
+        range1.setFrom(-3.3333);
+        range1.setTo(21.3333);
 
-        displayMessageAboutRangeWithNumber(range, 1);
+        displayMessageAboutRangeWithNumber(range1, 1);
+
+        Range range2 = new Range(0, 35.35);
+        Range range3 = new Range(-4.9, 10);
+        Range rangesIntersection = range1.getIntersection(range2).getIntersection(range3);
+
+        System.out.println(range1 + " пересекаем с " + range2 + " пересекаем с " + range3 + " = " + rangesIntersection);
     }
 }
