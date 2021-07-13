@@ -1,5 +1,7 @@
 package ru.academitschool.drozdetsky21;
 
+import java.util.Arrays;
+
 public class Range {
     private double from;
     private double to;
@@ -58,6 +60,40 @@ public class Range {
         return this;
     }
 
+    public Range[] getUnion(Range range) {
+        if (to < range.from || from > range.to) {
+            Range[] result = new Range[2];
+
+            if (to < range.from) {
+                result[0] = this;
+                result[1] = range;
+            } else {
+                result[0] = range;
+                result[1] = this;
+            }
+
+            return result;
+        }
+
+        Range[] result = new Range[1];
+
+        if (from <= range.from) {
+            if (to <= range.to) {
+                result[0] = new Range(from, range.to);
+            } else {
+                result[0] = this;
+            }
+        } else {
+            if (to > range.to) {
+                result[0] = new Range(range.from, to);
+            } else {
+                result[0] = range;
+            }
+        }
+
+        return result;
+    }
+
     private static void displayMessageAboutRangeWithNumber(Range range, double number) {
         double rangeStart = range.getFrom();
         double rangeEnd = range.getTo();
@@ -77,10 +113,25 @@ public class Range {
 
         displayMessageAboutRangeWithNumber(range1, 1);
 
+        System.out.println();
+
         Range range2 = new Range(0, 35.35);
         Range range3 = new Range(-4.9, 10);
-        Range rangesIntersection = range1.getIntersection(range2).getIntersection(range3);
 
+        Range rangesIntersection = range1.getIntersection(range2).getIntersection(range3);
         System.out.println(range1 + " пересекаем с " + range2 + " пересекаем с " + range3 + " = " + rangesIntersection);
+
+        System.out.println();
+
+        Range[] rangesUnion1 = range1.getUnion(range2);
+        System.out.println(range1 + " объединяем с " + range2 + " = " + Arrays.toString(rangesUnion1));
+
+        Range range4 = new Range(21.3333, 30.5);
+        Range[] rangesUnion2 = range1.getUnion(range4);
+        System.out.println(range1 + " объединяем с " + range4 + " = " + Arrays.toString(rangesUnion2));
+
+        Range range5 = new Range(28.8, 30.5);
+        Range[] rangesUnion3 = range1.getUnion(range5);
+        System.out.println(range1 + " объединяем с " + range5 + " = " + Arrays.toString(rangesUnion3));
     }
 }
