@@ -62,36 +62,46 @@ public class Range {
 
     public Range[] getUnion(Range range) {
         if (to < range.from || from > range.to) {
-            Range[] result = new Range[2];
-
             if (to < range.from) {
-                result[0] = this;
-                result[1] = range;
-            } else {
-                result[0] = range;
-                result[1] = this;
+                return new Range[]{this, range};
             }
 
-            return result;
+            return new Range[]{range, this};
         }
-
-        Range[] result = new Range[1];
 
         if (from <= range.from) {
             if (to <= range.to) {
-                result[0] = new Range(from, range.to);
-            } else {
-                result[0] = this;
+                return new Range[]{new Range(from, range.to)};
             }
-        } else {
-            if (to > range.to) {
-                result[0] = new Range(range.from, to);
-            } else {
-                result[0] = range;
-            }
+
+            return new Range[]{this};
         }
 
-        return result;
+        if (to > range.to) {
+            return new Range[]{new Range(range.from, to)};
+        }
+
+        return new Range[]{range};
+    }
+
+    public Range[] getDifference(Range range) {
+        if (from >= range.from && to <= range.to) {
+            return new Range[0];
+        }
+
+        if (to <= range.from || from >= range.to) {
+            return new Range[]{this};
+        }
+
+        if (from > range.from) {
+            return new Range[]{new Range(range.to, to)};
+        }
+
+        if (to <= range.to) {
+            return new Range[]{new Range(to, range.to)};
+        }
+
+        return new Range[]{new Range(from, range.from), new Range(range.to, to)};
     }
 
     private static void displayMessageAboutRangeWithNumber(Range range, double number) {
@@ -133,5 +143,17 @@ public class Range {
         Range range5 = new Range(28.8, 30.5);
         Range[] rangesUnion3 = range1.getUnion(range5);
         System.out.println(range1 + " объединяем с " + range5 + " = " + Arrays.toString(rangesUnion3));
+
+        System.out.println();
+
+        Range[] rangesDifference1 = range1.getDifference(range3);
+        System.out.println(range1 + " вычитаем " + range3 + " = " + Arrays.toString(rangesDifference1));
+
+        Range[] rangesDifference2 = range1.getDifference(range4);
+        System.out.println(range1 + " вычитаем " + range4 + " = " + Arrays.toString(rangesDifference2));
+
+        Range range6 = new Range(0, 3.3333);
+        Range[] rangesDifference3 = range1.getDifference(range6);
+        System.out.println(range1 + " вычитаем " + range6 + " = " + Arrays.toString(rangesDifference3));
     }
 }
