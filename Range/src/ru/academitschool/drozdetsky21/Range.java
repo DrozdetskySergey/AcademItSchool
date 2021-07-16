@@ -48,43 +48,19 @@ public class Range {
             return null;
         }
 
-        if (from <= range.from) {
-            if (to <= range.to) {
-                return new Range(range.from, to);
-            }
-
-            return new Range(range);
-        }
-
-        if (to > range.to) {
-            return new Range(from, range.to);
-        }
-
-        return new Range(this);
+        return new Range(Math.max(from, range.from), Math.min(to, range.to));
     }
 
     public Range[] getUnion(Range range) {
-        if (to < range.from || from > range.to) {
-            if (to < range.from) {
-                return new Range[]{new Range(this), new Range(range)};
-            }
+        if (to < range.from) {
+            return new Range[]{new Range(this), new Range(range)};
+        }
 
+        if (from > range.to) {
             return new Range[]{new Range(range), new Range(this)};
         }
 
-        if (from <= range.from) {
-            if (to <= range.to) {
-                return new Range[]{new Range(from, range.to)};
-            }
-
-            return new Range[]{new Range(this)};
-        }
-
-        if (to > range.to) {
-            return new Range[]{new Range(range.from, to)};
-        }
-
-        return new Range[]{new Range(range)};
+        return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
     }
 
     public Range[] getDifference(Range range) {

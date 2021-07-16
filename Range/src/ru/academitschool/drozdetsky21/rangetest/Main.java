@@ -52,7 +52,5 @@ public class Main {
         Range range6 = new Range(0, 3.3333);
         Range[] rangesDifference3 = range1.getDifference(range6);
         System.out.println(range1 + " вычитаем " + range6 + " = " + Arrays.toString(rangesDifference3));
-
-        System.out.println(Arrays.toString((new Range(3, 7)).getDifference(new Range(5, 7))));
     }
 }
