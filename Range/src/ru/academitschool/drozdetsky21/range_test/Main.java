@@ -1,6 +1,6 @@
-package ru.academitschool.drozdetsky21.rangetest;
+package ru.academitschool.drozdetsky21.range_test;
 
-import ru.academitschool.drozdetsky21.Range;
+import ru.academitschool.drozdetsky21.range.Range;
 
 import java.util.Arrays;
 

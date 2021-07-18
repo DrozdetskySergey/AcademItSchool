@@ -1,4 +1,4 @@
-package ru.academitschool.drozdetsky21;
+package ru.academitschool.drozdetsky21.range;
 
 public class Range {
     private double from;
