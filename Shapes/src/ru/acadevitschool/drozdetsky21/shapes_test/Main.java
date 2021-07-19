@@ -41,7 +41,8 @@ public class Main {
                 new Rectangle(4, 6),
                 new Rectangle(10, 3),
                 new Circle(3),
-                new Circle(4)};
+                new Circle(4)
+        };
 
         Shape maxAreaShape = getMaxArea(shapes);
         System.out.printf("Фигурой с максимальной площадью = %.4f, является %s%n", maxAreaShape.getArea(), maxAreaShape);
