@@ -3,11 +3,12 @@ package ru.acadevitschool.drozdetsky21.shapes_test;
 import ru.acadevitschool.drozdetsky21.shapes.*;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Main {
     private static Shape getMaxArea(Shape[] shapes) {
         if (shapes == null || shapes.length == 0) {
-            return null;
+            throw new IllegalArgumentException("Shape[] должен иметь минимум один элемент.");
         }
 
         Arrays.sort(shapes);
@@ -16,11 +17,17 @@ public class Main {
     }
 
     private static Shape getSecondPerimeter(Shape[] shapes) {
-        if (shapes == null || shapes.length < 2) {
-            return null;
+        if (shapes == null || shapes.length <= 1) {
+            throw new IllegalArgumentException("Shape[] должен иметь минимум два элемента.");
         }
 
-        Arrays.sort(shapes, new MaxPerimeterShapeComparator());
+        Comparator<Shape> comparator = (shape1, shape2) -> {
+            Double shapeOnePerimeter = shape1.getPerimeter();
+
+            return shapeOnePerimeter.compareTo(shape2.getPerimeter());
+        };
+
+        Arrays.sort(shapes, comparator);
 
         return shapes[shapes.length - 2];
     }
