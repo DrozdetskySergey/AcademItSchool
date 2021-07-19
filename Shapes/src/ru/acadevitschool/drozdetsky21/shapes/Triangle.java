@@ -1,6 +1,6 @@
 package ru.acadevitschool.drozdetsky21.shapes;
 
-public class Triangle implements Shape {
+public class Triangle implements Shape, Comparable<Shape> {
     private double x1;
     private double y1;
     private double x2;
@@ -128,5 +128,12 @@ public class Triangle implements Shape {
         result = prime * result + (int) y3;
 
         return result;
+    }
+
+    @Override
+    public int compareTo(Shape o) {
+        Double thisArea = this.getArea();
+
+        return thisArea.compareTo(o.getArea());
     }
 }

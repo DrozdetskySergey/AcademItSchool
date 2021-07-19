@@ -1,6 +1,6 @@
 package ru.acadevitschool.drozdetsky21.shapes;
 
-public class Circle implements Shape {
+public class Circle implements Shape, Comparable<Shape> {
     private double radius;
 
     public Circle(double radius) {
@@ -58,5 +58,12 @@ public class Circle implements Shape {
     @Override
     public int hashCode() {
         return (int) radius;
+    }
+
+    @Override
+    public int compareTo(Shape o) {
+        Double thisArea = this.getArea();
+
+        return thisArea.compareTo(o.getArea());
     }
 }

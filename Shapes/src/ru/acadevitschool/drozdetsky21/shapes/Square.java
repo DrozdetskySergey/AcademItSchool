@@ -1,6 +1,6 @@
 package ru.acadevitschool.drozdetsky21.shapes;
 
-public class Square implements Shape {
+public class Square implements Shape, Comparable<Shape> {
     private double side;
 
     public Square(double side) {
@@ -58,5 +58,12 @@ public class Square implements Shape {
     @Override
     public int hashCode() {
         return (int) side;
+    }
+
+    @Override
+    public int compareTo(Shape o) {
+        Double thisArea = this.getArea();
+
+        return thisArea.compareTo(o.getArea());
     }
 }

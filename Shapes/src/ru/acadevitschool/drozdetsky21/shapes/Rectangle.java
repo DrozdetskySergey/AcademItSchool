@@ -1,6 +1,6 @@
 package ru.acadevitschool.drozdetsky21.shapes;
 
-public class Rectangle implements Shape {
+public class Rectangle implements Shape, Comparable<Shape> {
     private double width;
     private double height;
 
@@ -65,5 +65,12 @@ public class Rectangle implements Shape {
         result = prime * result + (int) height;
 
         return result;
+    }
+
+    @Override
+    public int compareTo(Shape o) {
+        Double thisArea = this.getArea();
+
+        return thisArea.compareTo(o.getArea());
     }
 }
