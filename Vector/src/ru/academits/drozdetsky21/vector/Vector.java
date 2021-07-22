@@ -3,11 +3,15 @@ package ru.academits.drozdetsky21.vector;
 import java.util.Arrays;
 
 public class Vector {
-    private double[] array;
+    private final double[] array;
+
+    public double[] getArray() {
+        return array;
+    }
 
     public Vector(int n) {
         if (n <= 0) {
-            throw new IllegalArgumentException("length < 1");
+            throw new IllegalArgumentException("Длина вектора не может быть меньше 1.");
         }
 
         array = new double[n];
@@ -16,30 +20,34 @@ public class Vector {
 
     public Vector(Vector vector) {
         if (vector == null) {
-            throw new IllegalArgumentException("NULL");
+            throw new IllegalArgumentException("Передан NULL.");
         }
 
-        array = vector.toArray();
+        array = Arrays.copyOf(vector.getArray(), vector.getSize());
     }
 
     public Vector(double[] array) {
-        if (array == null || array.length == 0) {
-            throw new IllegalArgumentException("NULL | length < 1");
+        if (array == null) {
+            throw new IllegalArgumentException("Передан NULL.");
+        }
+
+        if (array.length == 0) {
+            throw new IllegalArgumentException("Передан пустой массив, а длина вектора не может быть меньше 1.");
         }
 
         this.array = Arrays.copyOf(array, array.length);
     }
 
     public Vector(int n, double[] array) {
-        if (array == null || n <= 0) {
-            throw new IllegalArgumentException("NULL | length < 1");
+        if (array == null) {
+            throw new IllegalArgumentException("Передан NULL.");
+        }
+
+        if (n <= 0) {
+            throw new IllegalArgumentException("Длина вектора не может быть меньше 1.");
         }
 
         this.array = Arrays.copyOf(array, n);
-    }
-
-    public double[] toArray() {
-        return Arrays.copyOf(array, array.length);
     }
 
     @Override
@@ -67,36 +75,36 @@ public class Vector {
 
         Vector vector = (Vector) o;
 
-        return Arrays.equals(array, vector.array);
+        return Arrays.equals(array, vector.getArray());
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
+        final int PRIME = 31;
         int result = 1;
 
         for (double element : array) {
-            result = prime * result + (int) element;
+            result = PRIME * result + Double.hashCode(element);
         }
 
         return result;
     }
 
     public Vector doAddition(Vector vector) {
-        int length = Math.min(this.array.length, vector.array.length);
+        final int LENGTH = Math.min(this.getSize(), vector.getSize());
 
-        for (int i = 0; i < length; i++) {
-            array[i] += vector.array[i];
+        for (int i = 0; i < LENGTH; i++) {
+            array[i] += vector.get(i);
         }
 
         return this;
     }
 
     public Vector doSubtraction(Vector vector) {
-        int length = Math.min(this.array.length, vector.array.length);
+        final int LENGTH = Math.min(this.getSize(), vector.getSize());
 
-        for (int i = 0; i < length; i++) {
-            array[i] -= vector.array[i];
+        for (int i = 0; i < LENGTH; i++) {
+            array[i] -= vector.get(i);
         }
 
         return this;
@@ -124,5 +132,24 @@ public class Vector {
 
     public void set(int index, double element) {
         array[index] = element;
+    }
+
+    public static Vector getSum(Vector vector1, Vector vector2) {
+        return new Vector(vector1).doAddition(vector2);
+    }
+
+    public static Vector getSubtraction(Vector base, Vector deductible) {
+        return new Vector(base).doSubtraction(deductible);
+    }
+
+    public static double getScalarProduct(Vector vector1, Vector vector2) {
+        final int LENGTH = Math.min(vector1.getSize(), vector2.getSize());
+        int scalarProduct = 0;
+
+        for (int i = 0; i < LENGTH; i++) {
+            scalarProduct += vector1.get(i) * vector2.get(i);
+        }
+
+        return scalarProduct;
     }
 }
