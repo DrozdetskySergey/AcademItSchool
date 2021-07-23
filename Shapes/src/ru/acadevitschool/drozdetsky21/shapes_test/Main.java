@@ -3,7 +3,6 @@ package ru.acadevitschool.drozdetsky21.shapes_test;
 import ru.acadevitschool.drozdetsky21.shapes.*;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class Main {
     private static Shape getShapeWithMaxArea(Shape[] shapes) {
@@ -15,7 +14,7 @@ public class Main {
             throw new IllegalArgumentException("Shape[] должен иметь минимум один элемент.");
         }
 
-        Arrays.sort(shapes);
+        Arrays.sort(shapes, new MaxAreaComparator());
 
         return shapes[shapes.length - 1];
     }
@@ -29,9 +28,7 @@ public class Main {
             throw new IllegalArgumentException("Shape[] должен иметь минимум два элемента.");
         }
 
-        Comparator<Shape> comparator = Comparator.comparingDouble(Shape::getPerimeter);
-
-        Arrays.sort(shapes, comparator);
+        Arrays.sort(shapes, new MaxPerimeterComparator());
 
         return shapes[shapes.length - 2];
     }
