@@ -52,18 +52,16 @@ public class Circle implements Shape, Comparable<Shape> {
 
         Circle circle = (Circle) o;
 
-        return Double.compare(circle.radius, radius) == 0;
+        return circle.radius == radius;
     }
 
     @Override
     public int hashCode() {
-        return (int) radius;
+        return Double.hashCode(radius);
     }
 
     @Override
     public int compareTo(Shape o) {
-        Double thisArea = this.getArea();
-
-        return thisArea.compareTo(o.getArea());
+        return Double.compare(getArea(), o.getArea());
     }
 }

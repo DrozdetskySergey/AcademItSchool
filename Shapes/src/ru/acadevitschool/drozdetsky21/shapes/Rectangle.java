@@ -9,22 +9,22 @@ public class Rectangle implements Shape, Comparable<Shape> {
         this.height = height;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
     @Override
     public double getWidth() {
         return width;
     }
 
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
     @Override
     public double getHeight() {
         return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
     }
 
     @Override
@@ -54,23 +54,21 @@ public class Rectangle implements Shape, Comparable<Shape> {
 
         Rectangle rectangle = (Rectangle) o;
 
-        return Double.compare(rectangle.width, width) == 0 && Double.compare(rectangle.height, height) == 0;
+        return rectangle.width == width && rectangle.height == height;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
+        final int PRIME = 31;
         int result = 1;
-        result = prime * result + (int) width;
-        result = prime * result + (int) height;
+        result = PRIME * result + Double.hashCode(width);
+        result = PRIME * result + Double.hashCode(height);
 
         return result;
     }
 
     @Override
     public int compareTo(Shape o) {
-        Double thisArea = this.getArea();
-
-        return thisArea.compareTo(o.getArea());
+        return Double.compare(getArea(), o.getArea());
     }
 }

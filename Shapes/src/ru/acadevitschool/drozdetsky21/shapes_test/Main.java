@@ -6,8 +6,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class Main {
-    private static Shape getMaxArea(Shape[] shapes) {
-        if (shapes == null || shapes.length == 0) {
+    private static Shape getShapeWithMaxArea(Shape[] shapes) {
+        if (shapes == null) {
+            throw new IllegalArgumentException("Передан NULL.");
+        }
+
+        if (shapes.length == 0) {
             throw new IllegalArgumentException("Shape[] должен иметь минимум один элемент.");
         }
 
@@ -16,16 +20,16 @@ public class Main {
         return shapes[shapes.length - 1];
     }
 
-    private static Shape getSecondPerimeter(Shape[] shapes) {
-        if (shapes == null || shapes.length <= 1) {
+    private static Shape getShapeWithSecondPerimeter(Shape[] shapes) {
+        if (shapes == null) {
+            throw new IllegalArgumentException("Передан NULL.");
+        }
+
+        if (shapes.length <= 1) {
             throw new IllegalArgumentException("Shape[] должен иметь минимум два элемента.");
         }
 
-        Comparator<Shape> comparator = (shape1, shape2) -> {
-            Double shapeOnePerimeter = shape1.getPerimeter();
-
-            return shapeOnePerimeter.compareTo(shape2.getPerimeter());
-        };
+        Comparator<Shape> comparator = Comparator.comparingDouble(Shape::getPerimeter);
 
         Arrays.sort(shapes, comparator);
 
@@ -44,10 +48,10 @@ public class Main {
                 new Circle(4)
         };
 
-        Shape maxAreaShape = getMaxArea(shapes);
+        Shape maxAreaShape = getShapeWithMaxArea(shapes);
         System.out.printf("Фигурой с максимальной площадью = %.4f, является %s%n", maxAreaShape.getArea(), maxAreaShape);
 
-        Shape secondPerimeterShape = getSecondPerimeter(shapes);
+        Shape secondPerimeterShape = getShapeWithSecondPerimeter(shapes);
         System.out.printf("Фигурой со вторым по величине периметром = %.4f, является %s%n", secondPerimeterShape.getPerimeter(), secondPerimeterShape);
     }
 }

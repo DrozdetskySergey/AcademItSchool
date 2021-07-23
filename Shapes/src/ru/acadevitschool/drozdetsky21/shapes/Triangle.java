@@ -65,7 +65,7 @@ public class Triangle implements Shape, Comparable<Shape> {
         this.y3 = y3;
     }
 
-    private double getSegmentLength(double x1, double y1, double x2, double y2) {
+    private static double getSegmentLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
@@ -81,12 +81,13 @@ public class Triangle implements Shape, Comparable<Shape> {
 
     @Override
     public double getArea() {
-        double semiperimeter = getPerimeter() / 2;
+        double sideLength1 = getSegmentLength(x1, y1, x2, y2);
+        double sideLength2 = getSegmentLength(x1, y1, x3, y3);
+        double sideLength3 = getSegmentLength(x2, y2, x3, y3);
 
-        return Math.sqrt(semiperimeter *
-                (semiperimeter - getSegmentLength(x1, y1, x2, y2)) *
-                (semiperimeter - getSegmentLength(x1, y1, x3, y3)) *
-                (semiperimeter - getSegmentLength(x2, y2, x3, y3)));
+        double semiPerimeter = (sideLength1 + sideLength2 + sideLength3) / 2;
+
+        return Math.sqrt(semiPerimeter * (semiPerimeter - sideLength1) * (semiPerimeter - sideLength2) * (semiPerimeter - sideLength3));
     }
 
     @Override
@@ -96,7 +97,7 @@ public class Triangle implements Shape, Comparable<Shape> {
 
     @Override
     public String toString() {
-        return String.format("Triangle(x1 = %.4f, y1 = %.4f, x2 = %.4f, y2 = %.4f, x3 = %.4f, y3 = %.4f)", x1, y1, x2, y2, x3, y3);
+        return String.format("Triangle((%.4f; %.4f), (%.4f; %.4f), (%.4f; %.4f))", x1, y1, x2, y2, x3, y3);
     }
 
     @Override
@@ -111,29 +112,25 @@ public class Triangle implements Shape, Comparable<Shape> {
 
         Triangle triangle = (Triangle) o;
 
-        return Double.compare(triangle.x1, x1) == 0 && Double.compare(triangle.y1, y1) == 0 &&
-                Double.compare(triangle.x2, x2) == 0 && Double.compare(triangle.y2, y2) == 0 &&
-                Double.compare(triangle.x3, x3) == 0 && Double.compare(triangle.y3, y3) == 0;
+        return triangle.x1 == x1 && triangle.y1 == y1 && triangle.x2 == x2 && triangle.y2 == y2 && triangle.x3 == x3 && triangle.y3 == y3;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
+        final int PRIME = 31;
         int result = 1;
-        result = prime * result + (int) x1;
-        result = prime * result + (int) y1;
-        result = prime * result + (int) x2;
-        result = prime * result + (int) y2;
-        result = prime * result + (int) x3;
-        result = prime * result + (int) y3;
+        result = PRIME * result + Double.hashCode(x1);
+        result = PRIME * result + Double.hashCode(y1);
+        result = PRIME * result + Double.hashCode(x2);
+        result = PRIME * result + Double.hashCode(y2);
+        result = PRIME * result + Double.hashCode(x3);
+        result = PRIME * result + Double.hashCode(y3);
 
         return result;
     }
 
     @Override
     public int compareTo(Shape o) {
-        Double thisArea = this.getArea();
-
-        return thisArea.compareTo(o.getArea());
+        return Double.compare(getArea(), o.getArea());
     }
 }

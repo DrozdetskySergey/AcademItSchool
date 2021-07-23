@@ -1,43 +1,43 @@
 package ru.acadevitschool.drozdetsky21.shapes;
 
 public class Square implements Shape, Comparable<Shape> {
-    private double side;
+    private double sideLength;
 
-    public Square(double side) {
-        this.side = side;
+    public Square(double sideLength) {
+        this.sideLength = sideLength;
     }
 
-    public double getSide() {
-        return side;
+    public double getSideLength() {
+        return sideLength;
     }
 
-    public void setSide(double side) {
-        this.side = side;
+    public void setSideLength(double sideLength) {
+        this.sideLength = sideLength;
     }
 
     @Override
     public double getWidth() {
-        return side;
+        return sideLength;
     }
 
     @Override
     public double getHeight() {
-        return side;
+        return sideLength;
     }
 
     @Override
     public double getArea() {
-        return side * side;
+        return sideLength * sideLength;
     }
 
     @Override
     public double getPerimeter() {
-        return side * 4;
+        return sideLength * 4;
     }
 
     @Override
     public String toString() {
-        return String.format("Square(side = %.4f)", side);
+        return String.format("Square(side = %.4f)", sideLength);
     }
 
     @Override
@@ -52,18 +52,16 @@ public class Square implements Shape, Comparable<Shape> {
 
         Square square = (Square) o;
 
-        return Double.compare(square.side, side) == 0;
+        return square.sideLength == sideLength;
     }
 
     @Override
     public int hashCode() {
-        return (int) side;
+        return Double.hashCode(sideLength);
     }
 
     @Override
     public int compareTo(Shape o) {
-        Double thisArea = this.getArea();
-
-        return thisArea.compareTo(o.getArea());
+        return Double.compare(getArea(), o.getArea());
     }
 }
