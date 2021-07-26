@@ -8,13 +8,16 @@ public class Main {
         Vector vector2 = new Vector(vector1);
         Vector vector3 = new Vector(10, new double[]{10, 10, 10, 10, 10, 10, 10});
 
-        vector1.doReverse().doAddition(vector3).doSubtraction(vector2).set(1, vector1.get(4));
+        System.out.println(vector3.getLength());
+        System.out.println(vector3.getSize());
+
+        vector1.flip().add(vector3).deduct(vector2).set(1, vector1.get(4));
         System.out.println(vector1);
 
-        Vector vector4 = Vector.getSum(vector1, vector2);
-        System.out.println(vector1 + " + " + vector2 + " = " + vector4);
+        Vector vector4 = Vector.getSum(vector2, vector1);
+        System.out.println(vector2 + " + " + vector1 + " = " + vector4);
 
-        Vector vector5 = Vector.getSubtraction(vector4, vector3);
+        Vector vector5 = Vector.getDifference(vector4, vector3);
         System.out.println(vector4 + " - " + vector3 + " = " + vector5);
 
         double scalarProduct = Vector.getScalarProduct(vector5, vector3);
