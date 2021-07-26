@@ -117,14 +117,14 @@ public class Triangle implements Shape, Comparable<Shape> {
 
     @Override
     public int hashCode() {
-        final int PRIME = 31;
+        final int prime = 31;
         int result = 1;
-        result = PRIME * result + Double.hashCode(x1);
-        result = PRIME * result + Double.hashCode(y1);
-        result = PRIME * result + Double.hashCode(x2);
-        result = PRIME * result + Double.hashCode(y2);
-        result = PRIME * result + Double.hashCode(x3);
-        result = PRIME * result + Double.hashCode(y3);
+        result = prime * result + Double.hashCode(x1);
+        result = prime * result + Double.hashCode(y1);
+        result = prime * result + Double.hashCode(x2);
+        result = prime * result + Double.hashCode(y2);
+        result = prime * result + Double.hashCode(x3);
+        result = prime * result + Double.hashCode(y3);
 
         return result;
     }

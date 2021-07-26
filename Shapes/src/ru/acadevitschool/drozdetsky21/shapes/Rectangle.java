@@ -59,10 +59,10 @@ public class Rectangle implements Shape, Comparable<Shape> {
 
     @Override
     public int hashCode() {
-        final int PRIME = 31;
+        final int prime = 31;
         int result = 1;
-        result = PRIME * result + Double.hashCode(width);
-        result = PRIME * result + Double.hashCode(height);
+        result = prime * result + Double.hashCode(width);
+        result = prime * result + Double.hashCode(height);
 
         return result;
     }
