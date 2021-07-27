@@ -45,6 +45,10 @@ public class Vector {
         this.components = Arrays.copyOf(array, size);
     }
 
+    public double[] toArray() {
+        return Arrays.copyOf(components, components.length);
+    }
+
     public double getLength() {
         double componentsInSquareSum = 0;
 
