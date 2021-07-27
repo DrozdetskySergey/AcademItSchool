@@ -14,7 +14,7 @@ public class Main {
             throw new IllegalArgumentException("Shape[] должен иметь минимум один элемент.");
         }
 
-        Arrays.sort(shapes, new MaxAreaComparator());
+        Arrays.sort(shapes, new AreaComparator());
 
         return shapes[shapes.length - 1];
     }
@@ -28,7 +28,7 @@ public class Main {
             throw new IllegalArgumentException("Shape[] должен иметь минимум два элемента.");
         }
 
-        Arrays.sort(shapes, new MaxPerimeterComparator());
+        Arrays.sort(shapes, new PerimeterComparator());
 
         return shapes[shapes.length - 2];
     }

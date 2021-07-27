@@ -37,7 +37,7 @@ public class Square implements Shape, Comparable<Shape> {
 
     @Override
     public String toString() {
-        return String.format("Square(side = %.4f)", sideLength);
+        return String.format("Square(sideLength = %.4f)", sideLength);
     }
 
     @Override

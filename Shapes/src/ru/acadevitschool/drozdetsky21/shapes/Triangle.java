@@ -81,13 +81,13 @@ public class Triangle implements Shape, Comparable<Shape> {
 
     @Override
     public double getArea() {
-        double sideLength1 = getSegmentLength(x1, y1, x2, y2);
-        double sideLength2 = getSegmentLength(x1, y1, x3, y3);
-        double sideLength3 = getSegmentLength(x2, y2, x3, y3);
+        double side1Length = getSegmentLength(x1, y1, x2, y2);
+        double side2Length = getSegmentLength(x1, y1, x3, y3);
+        double side3Length = getSegmentLength(x2, y2, x3, y3);
 
-        double semiPerimeter = (sideLength1 + sideLength2 + sideLength3) / 2;
+        double semiPerimeter = (side1Length + side2Length + side3Length) / 2;
 
-        return Math.sqrt(semiPerimeter * (semiPerimeter - sideLength1) * (semiPerimeter - sideLength2) * (semiPerimeter - sideLength3));
+        return Math.sqrt(semiPerimeter * (semiPerimeter - side1Length) * (semiPerimeter - side2Length) * (semiPerimeter - side3Length));
     }
 
     @Override
