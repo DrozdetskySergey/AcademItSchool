@@ -15,7 +15,7 @@ public class Vector {
 
     public Vector(Vector vector) {
         if (vector == null) {
-            throw new IllegalArgumentException("Передан vector == NULL.");
+            throw new IllegalArgumentException("Переданый Vector ссылается на NULL.");
         }
 
         components = Arrays.copyOf(vector.components, vector.components.length);
@@ -23,11 +23,11 @@ public class Vector {
 
     public Vector(double[] array) {
         if (array == null) {
-            throw new IllegalArgumentException("Передан double[] array == NULL.");
+            throw new IllegalArgumentException("Переданый массив double[] ссылается на NULL.");
         }
 
         if (array.length == 0) {
-            throw new IllegalArgumentException("Передан пустой массив. У вектора должен быть минимум 1 компонент.");
+            throw new IllegalArgumentException("Переданый массив пустой. У вектора должен быть минимум 1 компонент.");
         }
 
         this.components = Arrays.copyOf(array, array.length);
@@ -35,7 +35,7 @@ public class Vector {
 
     public Vector(int size, double[] array) {
         if (array == null) {
-            throw new IllegalArgumentException("Передан double[] array == NULL.");
+            throw new IllegalArgumentException("Переданый массив double[] ссылается на NULL.");
         }
 
         if (size <= 0) {
