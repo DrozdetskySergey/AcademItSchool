@@ -7,19 +7,19 @@ import java.util.Arrays;
 public class Matrix {
     private Vector[] rows;
 
-    public Matrix(int rows, int columns) {
-        if (columns <= 0) {
-            throw new IllegalArgumentException("Конструктор Matrix: columns = " + columns + "; У матрицы должен быть минимум 1 столбец.");
+    public Matrix(int rowsCount, int columnsCount) {
+        if (columnsCount <= 0) {
+            throw new IllegalArgumentException("Конструктор Matrix: columnsCount = " + columnsCount + "; У матрицы должен быть минимум 1 столбец.");
         }
 
-        if (rows <= 0) {
-            throw new IllegalArgumentException("Конструктор Matrix: rows = " + rows + "; У матрицы должна быть минимум 1 строка.");
+        if (rowsCount <= 0) {
+            throw new IllegalArgumentException("Конструктор Matrix: rowsCount = " + rowsCount + "; У матрицы должна быть минимум 1 строка.");
         }
 
-        this.rows = new Vector[rows];
+        this.rows = new Vector[rowsCount];
 
-        for (int i = 0; i < rows; i++) {
-            this.rows[i] = new Vector(columns);
+        for (int i = 0; i < rowsCount; i++) {
+            this.rows[i] = new Vector(columnsCount);
         }
     }
 
@@ -98,10 +98,18 @@ public class Matrix {
     }
 
     public Vector getRow(int index) {
+        if (index < 0 || index >= rows.length) {
+            throw new IllegalArgumentException("Выдача ветора-строки в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
+        }
+
         return rows[index];
     }
 
     public void setRow(int index, Vector row) {
+        if (index < 0 || index >= rows.length) {
+            throw new IllegalArgumentException("Замена ветора-строки в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
+        }
+
         if (row == null) {
             throw new IllegalArgumentException("Замена ветора-строки в матрице по индексу: Переданный вектор ссылается на NULL.");
         }
@@ -114,6 +122,10 @@ public class Matrix {
     }
 
     public Vector getColumn(int index) {
+        if (index < 0 || index >= rows[0].getSize()) {
+            throw new IllegalArgumentException("Выдача ветора-столбца в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
+        }
+
         double[] array = new double[rows.length];
 
         for (int i = 0; i < rows.length; i++) {
@@ -135,18 +147,18 @@ public class Matrix {
 
     public Matrix transpose() {
         double[][] array = toArray();
-        double[][] result = new double[array[0].length][array.length];
+        double[][] transposedArray = new double[array[0].length][array.length];
 
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[0].length; j++) {
-                result[j][i] = array[i][j];
+                transposedArray[j][i] = array[i][j];
             }
         }
 
-        rows = new Vector[result.length];
+        rows = new Vector[transposedArray.length];
 
         for (int i = 0; i < rows.length; i++) {
-            rows[i] = new Vector(result[i]);
+            rows[i] = new Vector(transposedArray[i]);
         }
 
         return this;
@@ -160,21 +172,23 @@ public class Matrix {
         return this;
     }
 
-    public Matrix multiply(Matrix matrix) {
-        if (rows[0].getSize() != matrix.rows.length) {
-            throw new IllegalArgumentException("Умножение матрицы на матрицу: не подходящие размерности (не согласованны).");
+    public Matrix multiply(Matrix multiplier) {
+        if (multiplier == null) {
+            throw new IllegalArgumentException("Умножение матрицы на матрицу: Переданная матрица ссылается на NULL.");
         }
 
-        int matrixColumnsCount = matrix.rows[0].getSize();
-        double[][] result = new double[rows.length][matrixColumnsCount];
+        if (rows[0].getSize() != multiplier.rows.length) {
+            throw new IllegalArgumentException("Умножение матрицы на матрицу: Не подходящие размерности матриц (не согласованны).");
+        }
+
+        int multiplierColumnsCount = multiplier.rows[0].getSize();
+        double[][] result = new double[rows.length][multiplierColumnsCount];
 
         for (int i = 0; i < rows.length; i++) {
-            for (int j = 0; j < matrixColumnsCount; j++) {
-                result[i][j] = Vector.getScalarProduct(rows[i], matrix.getColumn(j));
+            for (int j = 0; j < multiplierColumnsCount; j++) {
+                result[i][j] = Vector.getScalarProduct(rows[i], multiplier.getColumn(j));
             }
         }
-
-        rows = new Vector[rows.length];
 
         for (int i = 0; i < rows.length; i++) {
             rows[i] = new Vector(result[i]);
@@ -184,6 +198,10 @@ public class Matrix {
     }
 
     public Matrix multiply(Vector vector) {
+        if (vector == null) {
+            throw new IllegalArgumentException("Умножение матрицы на вектор: Переданный вектор ссылается на NULL.");
+        }
+
         if (rows[0].getSize() != vector.getSize()) {
             throw new IllegalArgumentException("Умножение матрицы на вектор: не подходящие размерности.");
         }
@@ -191,6 +209,46 @@ public class Matrix {
         Matrix matrix = new Matrix(new Vector[]{vector});
 
         return multiply(matrix.transpose());
+    }
+
+    private Matrix add(Matrix matrix) {
+        if (matrix == null) {
+            throw new IllegalArgumentException("Сложение матриц: Переданная матрица ссылается на NULL.");
+        }
+
+        if (matrix.rows.length != rows.length || matrix.rows[0].getSize() != rows[0].getSize()) {
+            throw new IllegalArgumentException("Сложение матриц: Размерности матриц на совпадают.");
+        }
+
+        for (int i = 0; i < rows.length; i++) {
+            rows[i].add(matrix.rows[i]);
+        }
+
+        return this;
+    }
+
+    public Matrix deduct(Matrix matrix) {
+        if (matrix == null) {
+            throw new IllegalArgumentException("Вычитание матрицы: Переданная матрица ссылается на NULL.");
+        }
+
+        if (matrix.rows.length != rows.length || matrix.rows[0].getSize() != rows[0].getSize()) {
+            throw new IllegalArgumentException("Вычитание матрицы: Размерности матриц на совпадают.");
+        }
+
+        for (int i = 0; i < rows.length; i++) {
+            rows[i].deduct(matrix.rows[i]);
+        }
+
+        return this;
+    }
+
+    public double getDeterminant() {
+        if (rows.length != rows[0].getSize()) {
+            throw new IllegalArgumentException("Вычисление определителя матрицы: Определитель вычисляется только для квадратной матрицы.");
+        }
+
+        return getArrayDeterminant(toArray());
     }
 
     @Override
@@ -224,5 +282,56 @@ public class Matrix {
         stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append("}");
 
         return stringBuilder.toString();
+    }
+
+    public static Matrix getSum(Matrix base, Matrix addition) {
+        return new Matrix(base).add(addition);
+    }
+
+    public static Matrix getDifference(Matrix base, Matrix deductible) {
+        return new Matrix(base).deduct(deductible);
+    }
+
+    public static Matrix getMultiply(Matrix multiplier1, Matrix multiplier2) {
+        return new Matrix(multiplier1).multiply(multiplier2);
+    }
+
+    private static double getArrayDeterminant(double[][] array) {
+        if (array.length == 1) {
+            return array[0][0];
+        }
+
+        if (array.length == 2) {
+            return array[0][0] * array[1][1] - array[0][1] * array[1][0];
+        }
+
+        double result = 0;
+        boolean isSumming = true;
+
+        for (int i = 0; i < array.length; i++) { // i <- ignoreColumnNumber
+            double[][] minor = new double[array.length - 1][array.length - 1];
+
+            int t = 0;
+
+            for (int j = 0; j < array.length; j++) {
+                if (j != i) {
+                    for (int n = 1; n < array.length; n++) {
+                        minor[n - 1][t] = array[n][j]; // the null row is always ignored
+                    }
+
+                    t++;
+                }
+            }
+
+            if (isSumming) {
+                result += array[0][i] * getArrayDeterminant(minor);
+            } else {
+                result -= array[0][i] * getArrayDeterminant(minor);
+            }
+
+            isSumming = !isSumming;
+        }
+
+        return result;
     }
 }

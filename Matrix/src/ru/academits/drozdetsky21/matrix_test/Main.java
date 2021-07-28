@@ -37,5 +37,14 @@ public class Main {
         Vector vector1 = new Vector(new double[]{1, 2, 3});
         System.out.print(matrix1);
         System.out.println(" * " + vector1 + " = " + matrix1.multiply(vector1));
+
+        Matrix matrix4 = new Matrix(new double[][]{
+                {-2, 2, 1, 0},
+                {1, -3, 3, 7},
+                {2, -1, 2, -3},
+                {-5, 4, -1, 2}
+        });
+
+        System.out.println(matrix4.getDeterminant());
     }
 }
