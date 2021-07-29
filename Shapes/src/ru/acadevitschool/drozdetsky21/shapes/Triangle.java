@@ -130,7 +130,7 @@ public class Triangle implements Shape, Comparable<Shape> {
     }
 
     @Override
-    public int compareTo(Shape o) {
-        return Double.compare(getArea(), o.getArea());
+    public int compareTo(Shape shape) {
+        return Double.compare(getArea(), shape.getArea());
     }
 }
