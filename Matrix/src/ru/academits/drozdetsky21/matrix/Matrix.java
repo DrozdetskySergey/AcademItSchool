@@ -292,7 +292,7 @@ public class Matrix {
         return new Matrix(base).deduct(deductible);
     }
 
-    public static Matrix getMultiply(Matrix multiplier1, Matrix multiplier2) {
+    public static Matrix getMultiplication(Matrix multiplier1, Matrix multiplier2) {
         return new Matrix(multiplier1).multiply(multiplier2);
     }
 
