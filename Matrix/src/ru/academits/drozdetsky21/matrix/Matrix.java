@@ -16,10 +16,10 @@ public class Matrix {
             throw new IllegalArgumentException("Конструктор Matrix: rowsCount = " + rowsCount + "; У матрицы должна быть минимум 1 строка.");
         }
 
-        this.rows = new Vector[rowsCount];
+        rows = new Vector[rowsCount];
 
         for (int i = 0; i < rowsCount; i++) {
-            this.rows[i] = new Vector(columnsCount);
+            rows[i] = new Vector(columnsCount);
         }
     }
 
@@ -85,7 +85,7 @@ public class Matrix {
         rows = new Vector[vectors.length];
 
         for (int i = 0; i < vectors.length; i++) {
-            this.rows[i] = new Vector(vectorMaxSize, vectors[i].toArray());
+            rows[i] = new Vector(vectorMaxSize, vectors[i].toArray());
         }
     }
 
@@ -99,7 +99,7 @@ public class Matrix {
 
     public Vector getRow(int index) {
         if (index < 0 || index >= rows.length) {
-            throw new IllegalArgumentException("Выдача ветора-строки в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
+            throw new IllegalArgumentException("Выдача вектора-строки в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
         }
 
         return rows[index];
@@ -107,15 +107,15 @@ public class Matrix {
 
     public void setRow(int index, Vector row) {
         if (index < 0 || index >= rows.length) {
-            throw new IllegalArgumentException("Замена ветора-строки в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
+            throw new IllegalArgumentException("Замена вектора-строки в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
         }
 
         if (row == null) {
-            throw new IllegalArgumentException("Замена ветора-строки в матрице по индексу: Переданный вектор ссылается на NULL.");
+            throw new IllegalArgumentException("Замена вектора-строки в матрице по индексу: Переданный вектор ссылается на NULL.");
         }
 
         if (row.getSize() != rows[0].getSize()) {
-            throw new IllegalArgumentException("Замена ветора-строки в матрице по индексу: Переданный вектор не подходящей длины.");
+            throw new IllegalArgumentException("Замена вектора-строки в матрице по индексу: Переданный вектор не подходящего размера.");
         }
 
         rows[index] = row;
@@ -123,7 +123,7 @@ public class Matrix {
 
     public Vector getColumn(int index) {
         if (index < 0 || index >= rows[0].getSize()) {
-            throw new IllegalArgumentException("Выдача ветора-столбца в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
+            throw new IllegalArgumentException("Выдача вектора-столбца в матрице по индексу: Передан index = " + index + " такого индекса не существует.");
         }
 
         double[] array = new double[rows.length];
@@ -174,7 +174,7 @@ public class Matrix {
 
     public Matrix multiply(Matrix multiplier) {
         if (multiplier == null) {
-            throw new IllegalArgumentException("Умножение матрицы на матрицу: Переданная матрица ссылается на NULL.");
+            throw new IllegalArgumentException("Умножение матрицы на матрицу: Матрица множитель ссылается на NULL.");
         }
 
         if (rows[0].getSize() != multiplier.rows.length) {
@@ -199,11 +199,11 @@ public class Matrix {
 
     public Matrix multiply(Vector vector) {
         if (vector == null) {
-            throw new IllegalArgumentException("Умножение матрицы на вектор: Переданный вектор ссылается на NULL.");
+            throw new IllegalArgumentException("Умножение матрицы на вектор-столбец: Переданный вектор ссылается на NULL.");
         }
 
         if (rows[0].getSize() != vector.getSize()) {
-            throw new IllegalArgumentException("Умножение матрицы на вектор: не подходящие размерности.");
+            throw new IllegalArgumentException("Умножение матрицы на вектор-столбец: не подходящие размерности.");
         }
 
         Matrix matrix = new Matrix(new Vector[]{vector});
@@ -213,7 +213,7 @@ public class Matrix {
 
     private Matrix add(Matrix matrix) {
         if (matrix == null) {
-            throw new IllegalArgumentException("Сложение матриц: Переданная матрица ссылается на NULL.");
+            throw new IllegalArgumentException("Сложение матриц: Прибавляемая матрица ссылается на NULL.");
         }
 
         if (matrix.rows.length != rows.length || matrix.rows[0].getSize() != rows[0].getSize()) {
@@ -227,17 +227,17 @@ public class Matrix {
         return this;
     }
 
-    public Matrix deduct(Matrix matrix) {
+    public Matrix subtract(Matrix matrix) {
         if (matrix == null) {
-            throw new IllegalArgumentException("Вычитание матрицы: Переданная матрица ссылается на NULL.");
+            throw new IllegalArgumentException("Разность матриц: Вычитаемая матрица ссылается на NULL.");
         }
 
         if (matrix.rows.length != rows.length || matrix.rows[0].getSize() != rows[0].getSize()) {
-            throw new IllegalArgumentException("Вычитание матрицы: Размерности матриц на совпадают.");
+            throw new IllegalArgumentException("Разность матриц: Размерности матриц на совпадают.");
         }
 
         for (int i = 0; i < rows.length; i++) {
-            rows[i].deduct(matrix.rows[i]);
+            rows[i].subtract(matrix.rows[i]);
         }
 
         return this;
@@ -285,14 +285,26 @@ public class Matrix {
     }
 
     public static Matrix getSum(Matrix base, Matrix addition) {
+        if (base == null) {
+            throw new IllegalArgumentException("Сложение матриц: Базовая матрица ссылается на NULL.");
+        }
+
         return new Matrix(base).add(addition);
     }
 
     public static Matrix getDifference(Matrix base, Matrix deductible) {
-        return new Matrix(base).deduct(deductible);
+        if (base == null) {
+            throw new IllegalArgumentException("Разность матриц: Базовая матрица ссылается на NULL.");
+        }
+
+        return new Matrix(base).subtract(deductible);
     }
 
     public static Matrix getMultiplication(Matrix multiplier1, Matrix multiplier2) {
+        if (multiplier1 == null) {
+            throw new IllegalArgumentException("Умножение матрицы на матрицу: Умножаемая матрица ссылается на NULL.");
+        }
+
         return new Matrix(multiplier1).multiply(multiplier2);
     }
 

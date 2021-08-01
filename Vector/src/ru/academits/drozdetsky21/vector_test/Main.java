@@ -11,7 +11,7 @@ public class Main {
         System.out.println(vector3.getLength());
         System.out.println(vector3.getSize());
 
-        vector1.flip().add(vector3).deduct(vector2).set(1, vector1.get(4));
+        vector1.flip().add(vector3).subtract(vector2).set(1, vector1.get(4));
         System.out.println(vector1);
 
         Vector vector4 = Vector.getSum(vector2, vector1);

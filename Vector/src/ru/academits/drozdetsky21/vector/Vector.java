@@ -30,7 +30,7 @@ public class Vector {
             throw new IllegalArgumentException("Переданый массив пустой. У вектора должен быть минимум 1 компонент.");
         }
 
-        this.components = Arrays.copyOf(array, array.length);
+        components = Arrays.copyOf(array, array.length);
     }
 
     public Vector(int size, double[] array) {
@@ -42,7 +42,7 @@ public class Vector {
             throw new IllegalArgumentException("size = " + size + " У вектора должен быть минимум 1 компонент.");
         }
 
-        this.components = Arrays.copyOf(array, size);
+        components = Arrays.copyOf(array, size);
     }
 
     public double[] toArray() {
@@ -101,14 +101,7 @@ public class Vector {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-
-        for (double element : components) {
-            result = prime * result + Double.hashCode(element);
-        }
-
-        return result;
+        return Arrays.hashCode(components);
     }
 
     public Vector add(Vector vector) {
@@ -125,7 +118,7 @@ public class Vector {
         return this;
     }
 
-    public Vector deduct(Vector vector) {
+    public Vector subtract(Vector vector) {
         int vectorSize = vector.components.length;
 
         if (components.length < vectorSize) {
@@ -156,7 +149,7 @@ public class Vector {
     }
 
     public static Vector getDifference(Vector base, Vector deductible) {
-        return new Vector(base).deduct(deductible);
+        return new Vector(base).subtract(deductible);
     }
 
     public static double getScalarProduct(Vector vector1, Vector vector2) {
