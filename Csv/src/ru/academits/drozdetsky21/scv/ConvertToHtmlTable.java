@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class ConvertToHtmlTable {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         if (args.length != 2) {
             System.out.println("Use parameters: [Input File Name] [Output File Name]");
 
@@ -68,6 +68,8 @@ public class ConvertToHtmlTable {
             }
 
             writer.print("</table></body></html>");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
