@@ -89,6 +89,39 @@ public class Matrix {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Matrix matrix = (Matrix) o;
+
+        return Arrays.equals(rows, matrix.rows);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(rows);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("{");
+
+        for (Vector row : rows) {
+            stringBuilder.append(row).append(", ");
+        }
+
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append("}");
+
+        return stringBuilder.toString();
+    }
+
     public int getRowsCount() {
         return rows.length;
     }
@@ -155,13 +188,13 @@ public class Matrix {
     }
 
     public Matrix transpose() {
-        Vector[] rows = new Vector[getColumnsCount()];
+        Vector[] newRows = new Vector[getColumnsCount()];
 
-        for (int i = 0; i < rows.length; i++) {
-            rows[i] = getColumn(i);
+        for (int i = 0; i < newRows.length; i++) {
+            newRows[i] = getColumn(i);
         }
 
-        this.rows = rows;
+        rows = newRows;
 
         return this;
     }
@@ -215,40 +248,35 @@ public class Matrix {
 
         Matrix matrix = new Matrix(new Vector[]{vector}).transpose();
 
-        return new Matrix(this).multiply(matrix).transpose().getRow(0);
+        return new Matrix(this).multiply(matrix).getColumn(0);
     }
 
-    private Matrix addOrSubtract(boolean isAdding, Matrix matrix) {
+    public Matrix add(Matrix matrix) {
         if (matrix == null) {
-            throw new IllegalArgumentException("Переданная матрица ссылается на NULL.");
+            throw new IllegalArgumentException("Прибавляемая матрица ссылается на NULL.");
         }
 
-        int columnsCount = getColumnsCount();
-        int matrixColumnsCount = matrix.getColumnsCount();
-
-        if (matrix.rows.length != rows.length || matrixColumnsCount != columnsCount) {
-            String message = String.format("Эта матрица размера [%d][%d], а переданая матрица размера [%d][%d]; Размерности матриц должны совпадать.", rows.length, columnsCount, matrix.rows.length, matrixColumnsCount);
-
-            throw new IllegalArgumentException(message);
-        }
+        checkSizesEquality(this, matrix);
 
         for (int i = 0; i < rows.length; i++) {
-            if (isAdding) {
-                rows[i].add(matrix.rows[i]);
-            } else {
-                rows[i].subtract(matrix.rows[i]);
-            }
+            rows[i].add(matrix.rows[i]);
         }
 
         return this;
     }
 
-    public Matrix add(Matrix matrix) {
-        return addOrSubtract(true, matrix);
-    }
-
     public Matrix subtract(Matrix matrix) {
-        return addOrSubtract(false, matrix);
+        if (matrix == null) {
+            throw new IllegalArgumentException("Вычитаемая матрица ссылается на NULL.");
+        }
+
+        checkSizesEquality(this, matrix);
+
+        for (int i = 0; i < rows.length; i++) {
+            rows[i].subtract(matrix.rows[i]);
+        }
+
+        return this;
     }
 
     public double getDeterminant() {
@@ -263,42 +291,26 @@ public class Matrix {
         return getDeterminant(toArray());
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
+    private static void checkSizesEquality(Matrix matrix1, Matrix matrix2) {
+        int matrix1ColumnsCount = matrix1.getColumnsCount();
+        int matrix1RowsCount = matrix1.getRowsCount();
+        int matrix2ColumnsCount = matrix2.getColumnsCount();
+        int matrix2RowsCount = matrix2.getRowsCount();
+
+        if (matrix1RowsCount != matrix2RowsCount || matrix1ColumnsCount != matrix2ColumnsCount) {
+            String message = String.format("Базовая матрица размера [%d][%d], а вторая матрица размера [%d][%d]; Размерности матриц должны совпадать.", matrix1RowsCount, matrix1ColumnsCount, matrix2RowsCount, matrix2ColumnsCount);
+
+            throw new IllegalArgumentException(message);
         }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Matrix matrix = (Matrix) o;
-
-        return Arrays.equals(rows, matrix.rows);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(rows);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("{");
-
-        for (Vector row : rows) {
-            stringBuilder.append(row).append(", ");
-        }
-
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append("}");
-
-        return stringBuilder.toString();
     }
 
     public static Matrix getSum(Matrix base, Matrix addition) {
         if (base == null) {
             throw new IllegalArgumentException("Базовая матрица ссылается на NULL.");
+        }
+
+        if (addition == null) {
+            throw new IllegalArgumentException("Прибавляемая матрица ссылается на NULL.");
         }
 
         return new Matrix(base).add(addition);
@@ -309,12 +321,20 @@ public class Matrix {
             throw new IllegalArgumentException("Базовая матрица ссылается на NULL.");
         }
 
+        if (deductible == null) {
+            throw new IllegalArgumentException("Вычитаемая матрица ссылается на NULL.");
+        }
+
         return new Matrix(base).subtract(deductible);
     }
 
     public static Matrix getProduct(Matrix multiplier1, Matrix multiplier2) {
         if (multiplier1 == null) {
-            throw new IllegalArgumentException("Умножаемая матрица ссылается на NULL.");
+            throw new IllegalArgumentException("Левая матрица ссылается на NULL.");
+        }
+
+        if (multiplier2 == null) {
+            throw new IllegalArgumentException("Правая матрица ссылается на NULL.");
         }
 
         return new Matrix(multiplier1).multiply(multiplier2);
