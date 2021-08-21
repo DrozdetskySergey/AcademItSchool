@@ -246,9 +246,13 @@ public class Matrix {
             throw new IllegalArgumentException("columnsCount = " + columnsCount + " должно быть равным vectorSize = " + vectorSize);
         }
 
-        Matrix matrix = new Matrix(new Vector[]{vector}).transpose();
+        double[] result = new double[rows.length];
 
-        return new Matrix(this).multiply(matrix).getColumn(0);
+        for (int i = 0; i < rows.length; i++) {
+            result[i] = Vector.getScalarProduct(rows[i], vector);
+        }
+
+        return new Vector(result);
     }
 
     public Matrix add(Matrix matrix) {

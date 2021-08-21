@@ -69,7 +69,7 @@ public class ConvertToHtmlTable {
 
             writer.print("</table></body></html>");
         } catch (FileNotFoundException e) {
-            System.out.println("Что-то пошло не так! Файл не найден!");
+            System.out.println("File not found!");
         }
     }
 }
