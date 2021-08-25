@@ -134,7 +134,7 @@ public class Matrix {
         int lastIndex = rows.length - 1;
 
         if (index < 0 || index > lastIndex) {
-            throw new ArrayIndexOutOfBoundsException("Передан rowIndex = " + index + "; Допустимые границы: [0, " + lastIndex + "].");
+            throw new IndexOutOfBoundsException("Передан rowIndex = " + index + "; Допустимые границы: [0, " + lastIndex + "].");
         }
 
         return new Vector(rows[index]);
@@ -144,7 +144,7 @@ public class Matrix {
         int lastIndex = rows.length - 1;
 
         if (index < 0 || index > lastIndex) {
-            throw new ArrayIndexOutOfBoundsException("Передан rowIndex = " + index + "; Допустимые границы: [0, " + lastIndex + "].");
+            throw new IndexOutOfBoundsException("Передан rowIndex = " + index + "; Допустимые границы: [0, " + lastIndex + "].");
         }
 
         if (row == null) {
@@ -162,10 +162,10 @@ public class Matrix {
     }
 
     public Vector getColumn(int index) {
-        int lastIndex = getColumnsCount();
+        int lastIndex = getColumnsCount() - 1;
 
         if (index < 0 || index > lastIndex) {
-            throw new ArrayIndexOutOfBoundsException("Передан columnIndex = " + index + "; Допустимые границы: [0, " + lastIndex + "].");
+            throw new IndexOutOfBoundsException("Передан columnIndex = " + index + "; Допустимые границы: [0, " + lastIndex + "].");
         }
 
         double[] array = new double[rows.length];
