@@ -1,8 +1,9 @@
 package ru.academits.drozdetsky21.lambdas;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 public class Lambdas {
     public static void main(String[] args) {
@@ -56,5 +57,40 @@ public class Lambdas {
                 .filter(p -> p.getAge() >= 20 & p.getAge() <= 45)
                 .sorted((p1, p2) -> p2.getAge() - p1.getAge())
                 .forEach(p -> System.out.println(p.getName()));
+
+        System.out.println();
+
+        // Создать бесконечный поток корней чисел. С консоли прочитать число сколько элементов нужно вычислить, затем распечатать эти элементы
+        DoubleStream numbersRoots = DoubleStream.iterate(1, n -> n + 1).map(Math::sqrt);
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Сколько элементов последовательности корней чмсел вывести? n = ");
+        int numbersRootsCount = scanner.nextInt();
+
+        numbersRoots.limit(numbersRootsCount).forEach(System.out::println);
+
+        System.out.println();
+
+        // Попробовать реализовать бесконечный поток чисел Фиббоначчи
+        int fibonacciNumbersCount;
+
+        do {
+            System.out.print("Сколько чисел Фибоначчи вывести? (минимум одно число) n = ");
+            fibonacciNumbersCount = scanner.nextInt();
+        } while (fibonacciNumbersCount < 1);
+
+        int[] previousNumber = {0};
+        System.out.println(previousNumber[0]);
+
+        IntStream fibonacciNumbers = IntStream.iterate(1, n -> {
+            int prePreviousNumber = previousNumber[0];
+            previousNumber[0] = n;
+            return previousNumber[0] + prePreviousNumber;
+        });
+
+        fibonacciNumbers.limit(fibonacciNumbersCount - 1).forEach(System.out::println);
+
+        scanner.close();
     }
 }
