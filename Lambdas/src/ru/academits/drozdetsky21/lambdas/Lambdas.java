@@ -3,7 +3,7 @@ package ru.academits.drozdetsky21.lambdas;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Lambdas {
     public static void main(String[] args) {
@@ -16,20 +16,27 @@ public class Lambdas {
         persons.add(new Person("Sergey", 24));
         persons.add(new Person("Ludmila", 35));
 
-        // получить список уникальных имен
-        List<String> uniqueNames = persons.stream().map(Person::getName).distinct().collect(Collectors.toList());
+        // А. получить список уникальных имен
+        List<String> uniqueNames = persons.stream()
+                .map(Person::getName)
+                .distinct()
+                .collect(Collectors.toList());
         System.out.println(uniqueNames);
 
         System.out.println();
 
-        // вывести список уникальных имен в формате: Имена: Иван, Сергей, Петр.
-        String message = uniqueNames.stream().collect(Collectors.joining(", ", "Names: ", "."));
-        System.out.println(message);
+        // Б. вывести список уникальных имен в формате: Имена: Иван, Сергей, Петр.
+        String uniqueNamesMessage = uniqueNames.stream()
+                .collect(Collectors.joining(", ", "Names: ", "."));
+        System.out.println(uniqueNamesMessage);
 
         System.out.println();
 
-        // получить список людей младше 18, посчитать для них средний возраст
-        OptionalDouble minorsAverageAge = persons.stream().filter(p -> p.getAge() < 18).mapToInt(Person::getAge).average();
+        // В. получить список людей младше 18, посчитать для них средний возраст
+        OptionalDouble minorsAverageAge = persons.stream()
+                .filter(p -> p.getAge() < 18)
+                .mapToInt(Person::getAge)
+                .average();
 
         if (minorsAverageAge.isPresent()) {
             System.out.println(minorsAverageAge.getAsDouble());
@@ -37,60 +44,37 @@ public class Lambdas {
 
         System.out.println();
 
-        // при помощи группировки получить Map, в котором ключи имена, а значения средний возраст
-        Map<String, Double> averageAgesForNames = new HashMap<>();
-
-        persons.stream().collect(Collectors.groupingBy(Person::getName)).forEach((name, listForName) -> {
-            OptionalDouble averageAge = listForName.stream().mapToInt(Person::getAge).average();
-
-            if (averageAge.isPresent()) {
-                averageAgesForNames.put(name, averageAge.getAsDouble());
-            }
-        });
-
-        System.out.println(averageAgesForNames);
+        // Г. при помощи группировки получить Map, в котором ключи имена, а значения средний возраст
+        persons.stream()
+                .collect(Collectors.groupingBy(Person::getName, Collectors.averagingInt(Person::getAge)))
+                .forEach((s, d) -> System.out.printf("%s - %s%n", s, d));
 
         System.out.println();
 
-        // получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
+        // Д. получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
         persons.stream()
-                .filter(p -> p.getAge() >= 20 & p.getAge() <= 45)
+                .filter(p -> p.getAge() >= 20 && p.getAge() <= 45)
                 .sorted((p1, p2) -> p2.getAge() - p1.getAge())
                 .forEach(p -> System.out.println(p.getName()));
 
         System.out.println();
 
-        // Создать бесконечный поток корней чисел. С консоли прочитать число сколько элементов нужно вычислить, затем распечатать эти элементы
-        DoubleStream numbersRoots = DoubleStream.iterate(1, n -> n + 1).map(Math::sqrt);
-
+        // * Создать бесконечный поток корней чисел. С консоли прочитать число сколько элементов нужно вычислить, затем распечатать эти элементы
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Сколько элементов последовательности корней чмсел вывести? n = ");
         int numbersRootsCount = scanner.nextInt();
 
-        numbersRoots.limit(numbersRootsCount).forEach(System.out::println);
+        DoubleStream.iterate(1, n -> n + 1)
+                .map(Math::sqrt)
+                .limit(numbersRootsCount)
+                .forEach(System.out::println);
 
         System.out.println();
 
-        // Попробовать реализовать бесконечный поток чисел Фиббоначчи
-        int fibonacciNumbersCount;
-
-        do {
-            System.out.print("Сколько чисел Фибоначчи вывести? (минимум одно число) n = ");
-            fibonacciNumbersCount = scanner.nextInt();
-        } while (fibonacciNumbersCount < 1);
-
-        int[] previousNumber = {0};
-        System.out.println(previousNumber[0]);
-
-        IntStream fibonacciNumbers = IntStream.iterate(1, n -> {
-            int prePreviousNumber = previousNumber[0];
-            previousNumber[0] = n;
-            return previousNumber[0] + prePreviousNumber;
-        });
-
-        fibonacciNumbers.limit(fibonacciNumbersCount - 1).forEach(System.out::println);
-
-        scanner.close();
+        // ** Попробовать реализовать бесконечный поток чисел Фиббоначчи
+        Stream.iterate(new int[]{0, 1}, n -> new int[]{n[1], n[0] + n[1]})
+                .limit(5)
+                .forEach(e -> System.out.println(e[0]));
     }
 }
