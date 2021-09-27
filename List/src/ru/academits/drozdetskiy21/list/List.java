@@ -1,17 +1,27 @@
 package ru.academits.drozdetskiy21.list;
 
 public class List<E> {
-    private Node<E> head;
-    private int size;
+    private Node<E> head = null;
+    private int size = 0;
 
     public List() {
-        head = null;
-        size = 0;
     }
 
     public List(java.util.List<E> baseList) {
+        Node<E> lastNode = null;
+        boolean isFirstElement = true;
+
         for (E e : baseList) {
-            add(e);
+            if (isFirstElement) {
+                add(e);
+                lastNode = head;
+                isFirstElement = false;
+            } else {
+                Node<E> newNode = new Node<>(e);
+                lastNode.setNext(newNode);
+                ++size;
+                lastNode = newNode;
+            }
         }
     }
 
@@ -161,10 +171,16 @@ public class List<E> {
 
         chekHead();
         Node<E> node = head;
+        listClone.head = new Node<>(node.getData());
+        listClone.size = 1;
+        Node<E> lastNodeClone = listClone.head;
 
-        for (int i = 0; i < size; i++) {
-            listClone.add(node.getData());
-            node = getNextNode(node, i);
+        for (int i = 1; i < size; i++) {
+            node = getNextNode(node, i - 1);
+            Node<E> nodeClone = new Node<>(node.getData());
+            lastNodeClone.setNext(nodeClone);
+            listClone.size++;
+            lastNodeClone = nodeClone;
         }
 
         return listClone;
