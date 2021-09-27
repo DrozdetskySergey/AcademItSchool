@@ -53,7 +53,7 @@ public class ArrayListHome {
               повторяться. Надо создать новый список, в котором будут
               элементы первого списка в таком же порядке, но без
               повторений */
-        List<Integer> uniqueNumbers = new ArrayList<>();
+        List<Integer> uniqueNumbers = new ArrayList<>(numbers.size());
 
         for (Integer n : numbers) {
             if (!uniqueNumbers.contains(n)) {
