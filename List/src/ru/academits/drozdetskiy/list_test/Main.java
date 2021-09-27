@@ -10,12 +10,18 @@ public class Main {
         System.out.println(stringsList.getSize());
         System.out.println(stringsList);
 
+        System.out.println();
+
         stringsList.add(2, "f");
         stringsList.addFirstOne("0");
         System.out.println(stringsList);
 
+        System.out.println();
+
         System.out.println(stringsList.set(0, "g"));
         System.out.println(stringsList);
+
+        System.out.println();
 
         System.out.println(stringsList.remove("f"));
         System.out.println(stringsList.remove("y"));
@@ -23,11 +29,18 @@ public class Main {
         System.out.println(stringsList.removeFirstOne());
         System.out.println(stringsList);
 
-        System.out.println(stringsList.get(3));
+        System.out.println();
 
         stringsList.addFirstOne("o");
         System.out.println(stringsList);
         System.out.println(stringsList.getFirstOne());
+        System.out.println(stringsList.get(3));
+
+        System.out.println();
+
+        System.out.println(stringsList.getClone() + " - " + stringsList.reverse());
+
+        System.out.println();
 
         stringsList = new List<>();
         System.out.println(stringsList);

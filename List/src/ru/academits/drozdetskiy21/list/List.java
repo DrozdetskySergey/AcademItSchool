@@ -128,12 +128,46 @@ public class List<E> {
         return false;
     }
 
-    public void reverse() {
+    public List<E> reverse() {
+        if (size < 2) {
+            return this;
+        }
 
+        chekHead();
+        Node<E> prevNode = head;
+        Node<E> node = getNextNode(head, 0);
+        Node<E> nextNode = getNextNode(node, 1);
+        node.setNext(prevNode);
+
+        for (int i = 2; i < size; i++) {
+            prevNode = node;
+            node = nextNode;
+            nextNode = getNextNode(node, i);
+            node.setNext(prevNode);
+        }
+
+        head.setNext(null);
+        head = node;
+
+        return this;
     }
 
     public List<E> getClone() {
-        return this;
+        List<E> listClone = new List<>();
+
+        if (size == 0) {
+            return listClone;
+        }
+
+        chekHead();
+        Node<E> node = head;
+
+        for (int i = 0; i < size; i++) {
+            listClone.add(node.getData());
+            node = getNextNode(node, i);
+        }
+
+        return listClone;
     }
 
     private void chekIndex(int index) {
