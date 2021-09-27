@@ -18,6 +18,7 @@ public class Main {
         System.out.println(stringsList);
 
         System.out.println(stringsList.remove("f"));
+        System.out.println(stringsList.remove("y"));
         System.out.println(stringsList.remove(1));
         System.out.println(stringsList.removeFirstOne());
         System.out.println(stringsList);

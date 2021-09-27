@@ -1,10 +1,10 @@
 package ru.academits.drozdetskiy21.list;
 
-class Element<E> {
+class Node<E> {
     private E data;
-    private Element<E> next;
+    private Node<E> next;
 
-    public Element(E data) {
+    public Node(E data) {
         this.data = data;
         next = null;
     }
@@ -17,11 +17,11 @@ class Element<E> {
         this.data = data;
     }
 
-    public Element<E> getNext() {
+    public Node<E> getNext() {
         return next;
     }
 
-    public void setNext(Element<E> next) {
+    public void setNext(Node<E> next) {
         this.next = next;
     }
 
