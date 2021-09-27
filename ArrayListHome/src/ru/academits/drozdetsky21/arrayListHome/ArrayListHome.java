@@ -14,11 +14,11 @@ public class ArrayListHome {
         List<String> strings = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader("in.txt"))) {
-            String line = reader.readLine();
+            String string = reader.readLine();
 
-            while (line != null) {
-                strings.add(line);
-                line = reader.readLine();
+            while (string != null) {
+                strings.add(string);
+                string = reader.readLine();
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
@@ -56,16 +56,7 @@ public class ArrayListHome {
         List<Integer> uniqueNumbers = new ArrayList<>();
 
         for (Integer n : numbers) {
-            boolean isUniqueNumber = true;
-
-            for (Integer un : uniqueNumbers) {
-                if (un.equals(n)) {
-                    isUniqueNumber = false;
-                    break;
-                }
-            }
-
-            if (isUniqueNumber) {
+            if (!uniqueNumbers.contains(n)) {
                 uniqueNumbers.add(n);
             }
         }
