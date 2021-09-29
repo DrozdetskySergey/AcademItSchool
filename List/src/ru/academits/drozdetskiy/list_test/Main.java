@@ -3,6 +3,7 @@ package ru.academits.drozdetskiy.list_test;
 import ru.academits.drozdetskiy21.list.List;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,7 +24,12 @@ public class Main {
 
         System.out.println();
 
-        System.out.println(stringsList.remove("f"));
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("remove String = ");
+        String inputString = scanner.nextLine();
+
+        System.out.println(stringsList.remove(inputString));
         System.out.println(stringsList.remove("y"));
         System.out.println(stringsList.remove(1));
         System.out.println(stringsList.removeFirstOne());

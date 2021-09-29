@@ -108,8 +108,9 @@ public class List<E> {
         }
 
         chekHead();
+        E data = head.getData();
 
-        if ((o == null && head.getData() == null) || (o != null && o.equals(head.getData()))) {
+        if ((o == null && data == null) || (data != null && data.equals(o))) {
             head = head.getNext();
             --size;
 
@@ -124,7 +125,9 @@ public class List<E> {
         Node<E> prevNode = head;
 
         for (int i = 1; i < size; i++) {
-            if ((o == null && node.getData() == null) || (o != null && o.equals(node.getData()))) {
+            data = node.getData();
+
+            if ((o == null && data == null) || (data != null && data.equals(o))) {
                 prevNode.setNext(node.getNext());
                 --size;
 
