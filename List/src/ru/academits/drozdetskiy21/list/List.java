@@ -191,7 +191,7 @@ public class List<E> {
 
     private void chekIndex(int index) {
         if (size == 0) {
-            throw new NullPointerException("Список пустой!");
+            throw new IndexOutOfBoundsException("Список пустой!");
         }
 
         if (index < 0 || index >= size) {

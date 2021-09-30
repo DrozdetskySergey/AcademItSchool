@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AcademItSchool.iml" filepath="$PROJECT_DIR$/.idea/AcademItSchool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArrayList/ArrayList.iml" filepath="$PROJECT_DIR$/ArrayList/ArrayList.iml" />
       <module fileurl="file://$PROJECT_DIR$/ArrayListHome/ArrayListHome.iml" filepath="$PROJECT_DIR$/ArrayListHome/ArrayListHome.iml" />
       <module fileurl="file://$PROJECT_DIR$/Csv/Csv.iml" filepath="$PROJECT_DIR$/Csv/Csv.iml" />
       <module fileurl="file://$PROJECT_DIR$/Lambdas/Lambdas.iml" filepath="$PROJECT_DIR$/Lambdas/Lambdas.iml" />
