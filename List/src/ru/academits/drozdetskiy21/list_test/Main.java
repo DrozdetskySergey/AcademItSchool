@@ -1,4 +1,4 @@
-package ru.academits.drozdetskiy.list_test;
+package ru.academits.drozdetskiy21.list_test;
 
 import ru.academits.drozdetskiy21.list.List;
 
@@ -14,7 +14,7 @@ public class Main {
         System.out.println();
 
         stringsList.add(2, "f");
-        stringsList.addFirstOne("0");
+        stringsList.addFirst("0");
         System.out.println(stringsList);
 
         System.out.println();
@@ -32,14 +32,14 @@ public class Main {
         System.out.println(stringsList.remove(inputString));
         System.out.println(stringsList.remove("y"));
         System.out.println(stringsList.remove(1));
-        System.out.println(stringsList.removeFirstOne());
+        System.out.println(stringsList.removeFirst());
         System.out.println(stringsList);
 
         System.out.println();
 
-        stringsList.addFirstOne("o");
+        stringsList.addFirst("o");
         System.out.println(stringsList);
-        System.out.println(stringsList.getFirstOne());
+        System.out.println(stringsList.getFirst());
         System.out.println(stringsList.get(3));
 
         System.out.println();
@@ -50,6 +50,6 @@ public class Main {
 
         stringsList = new List<>();
         System.out.println(stringsList);
-        stringsList.getFirstOne();
+        stringsList.getFirst();
     }
 }

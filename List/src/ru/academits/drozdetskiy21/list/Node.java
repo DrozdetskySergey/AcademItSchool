@@ -6,7 +6,6 @@ class Node<E> {
 
     public Node(E data) {
         this.data = data;
-        next = null;
     }
 
     public E getData() {
@@ -23,10 +22,5 @@ class Node<E> {
 
     public void setNext(Node<E> next) {
         this.next = next;
-    }
-
-    @Override
-    public String toString() {
-        return data.toString();
     }
 }
