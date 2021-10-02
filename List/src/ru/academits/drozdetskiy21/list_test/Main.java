@@ -13,7 +13,7 @@ public class Main {
 
         System.out.println();
 
-        stringsList.add(2, "f");
+        stringsList.add(stringsList.getSize(), "f");
         stringsList.addFirst("0");
         System.out.println(stringsList);
 

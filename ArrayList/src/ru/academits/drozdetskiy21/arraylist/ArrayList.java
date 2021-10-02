@@ -3,28 +3,29 @@ package ru.academits.drozdetskiy21.arraylist;
 import java.util.*;
 
 public class ArrayList<T> implements List<T> {
-    T[] array = (T[]) new Object[10];
-    int size = 0;
-    long modificationCount = 0;
+    T[] array;
+    int size;
+    long modificationCount;
 
     public ArrayList() {
+        array = (T[]) new Object[10];
     }
 
     public ArrayList(int capacity) {
         if (capacity < 0) {
-            throw new RuntimeException("Задана вместимость: " + capacity);
+            throw new IllegalArgumentException("Capacity: " + capacity);
         }
 
-        array = Arrays.copyOf(array, capacity);
+        array = (T[]) new Object[capacity];
     }
 
     public ArrayList(Collection<? extends T> c) {
         if (c == null) {
-            throw new IllegalArgumentException("Передана Collection = NULL");
+            throw new IllegalArgumentException("Collection = NULL");
         }
 
         size = c.size();
-        array = Arrays.copyOf(array, size);
+        array = (T[]) new Object[size];
 
         int i = 0;
 
@@ -61,6 +62,10 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
+        if (a == null) {
+            throw new IllegalArgumentException("Array = null");
+        }
+
         if (a.length < size) {
             return (T1[]) Arrays.copyOf(array, size);
         }
@@ -88,34 +93,18 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-        int removeIndex = -1;
+        int removedIndex = indexOf(o);
 
-        if (o == null) {
-            for (int i = 0; i < size; i++) {
-                if (array[i] == null) {
-                    removeIndex = i;
-                    break;
-                }
-            }
-        } else {
-            for (int i = 0; i < size; i++) {
-                if (array[i] != null && array[i].equals(o)) {
-                    removeIndex = i;
-                    break;
-                }
-            }
+        if (removedIndex < 0) {
+            return false;
         }
 
-        if (removeIndex >= 0) {
-            ++modificationCount;
-            System.arraycopy(array, removeIndex + 1, array, removeIndex, (size - 1) - removeIndex);
-            --size;
-            array[size] = null;
+        ++modificationCount;
+        System.arraycopy(array, removedIndex + 1, array, removedIndex, (size - 1) - removedIndex);
+        --size;
+        array[size] = null;
 
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     @Override
@@ -135,41 +124,34 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        if (c == null) {
-            return false;
-        }
-
-        ++modificationCount;
-        addCollection(size, c);
-
-        return true;
+        return addCollection(size, c);
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        if (c == null) {
+        if (index == size) {
+            return addCollection(size, c);
+        } else {
+            checkIndex(index);
+        }
+
+        return addCollection(index, c);
+    }
+
+    private boolean addCollection(int index, Collection<? extends T> c) {
+        if (c == null || c.size() == 0) {
             return false;
         }
 
-        chekIndex(index);
         ++modificationCount;
-        addCollection(index, c);
-
-        return true;
-    }
-
-    private void addCollection(int index, Collection<? extends T> c) {
         int collectionSize = c.size();
+        T[] collectionArray = (T[]) c.toArray();
         setMinCapacity(size + collectionSize);
-        System.arraycopy(array, index, array, index + collectionSize, (size - 1) - index);
+        System.arraycopy(array, index, array, index + collectionSize, size - index);
+        System.arraycopy(collectionArray, 0, array, index, collectionSize);
         size += collectionSize;
 
-        int i = 0;
-
-        for (T t : c) {
-            array[index + i] = t;
-            ++i;
-        }
+        return true;
     }
 
     @Override
@@ -182,32 +164,32 @@ public class ArrayList<T> implements List<T> {
         return batchRemove(c, false);
     }
 
-    private boolean batchRemove(Collection<?> c, boolean isRemoved) {
-        if (c == null) {
+    private boolean batchRemove(Collection<?> c, boolean isRemove) {
+        if (c == null || c.size() == 0) {
             return false;
         }
 
-        boolean[] removeFlags = new boolean[size];
-        Arrays.fill(removeFlags, !isRemoved);
-        int removeCount = isRemoved ? 0 : size;
+        boolean[] booleansArray = new boolean[size]; // equivalent array element be deleted or not
+        Arrays.fill(booleansArray, !isRemove);
+        int removedCount = isRemove ? 0 : size;
 
         for (int i = 0; i < size; i++) {
             if (c.contains(array[i])) {
-                removeFlags[i] = isRemoved;
-                removeCount = isRemoved ? removeCount + 1 : removeCount - 1;
+                booleansArray[i] = isRemove;
+                removedCount = isRemove ? removedCount + 1 : removedCount - 1;
             }
         }
 
-        if (removeCount == 0) {
+        if (removedCount == 0) {
             return false;
         }
 
         ++modificationCount;
-        T[] newArray = (T[]) new Object[size - removeCount];
+        T[] newArray = (T[]) new Object[size - removedCount];
         int i = 0;
 
         for (int j = 0; j < size; j++) {
-            if (!removeFlags[j]) {
+            if (!booleansArray[j]) {
                 newArray[i] = array[j];
                 ++i;
             }
@@ -229,14 +211,14 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        chekIndex(index);
+        checkIndex(index);
 
         return array[index];
     }
 
     @Override
     public T set(int index, T element) {
-        chekIndex(index);
+        checkIndex(index);
         ++modificationCount;
         T oldElement = array[index];
         array[index] = element;
@@ -246,39 +228,37 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
-        chekIndex(index);
+        if (index == size) {
+            add(element);
+
+            return;
+        }
+
+        checkIndex(index);
         ++modificationCount;
         setMinCapacity(size + 1);
-        System.arraycopy(array, index, array, index + 1, (size - 1) - index);
+        System.arraycopy(array, index, array, index + 1, size - index);
         array[index] = element;
         ++size;
     }
 
     @Override
     public T remove(int index) {
-        chekIndex(index);
+        checkIndex(index);
         ++modificationCount;
-        T removeElement = array[index];
+        T removedElement = array[index];
         System.arraycopy(array, index + 1, array, index, (size - 1) - index);
         --size;
         array[size] = null;
 
-        return removeElement;
+        return removedElement;
     }
 
     @Override
     public int indexOf(Object o) {
-        if (o == null) {
-            for (int i = 0; i < size; i++) {
-                if (array[i] == null) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = 0; i < size; i++) {
-                if (array[i] != null && array[i].equals(o)) {
-                    return i;
-                }
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(o, array[i])) {
+                return i;
             }
         }
 
@@ -288,7 +268,7 @@ public class ArrayList<T> implements List<T> {
     @Override
     public int lastIndexOf(Object o) {
         for (int i = size - 1; i >= 0; i--) {
-            if ((o == null && array[i] == null) || (array[i] != null && array[i].equals(o))) {
+            if (Objects.equals(o, array[i])) {
                 return i;
             }
         }
@@ -325,13 +305,13 @@ public class ArrayList<T> implements List<T> {
         }
     }
 
-    private void chekIndex(int index) {
+    private void checkIndex(int index) {
         if (size == 0) {
-            throw new IndexOutOfBoundsException("Index = " + index + ". Список пустой!");
+            throw new IndexOutOfBoundsException("Index = " + index + ", Size = 0");
         }
 
         if (index < 0 || index >= size) {
-            throw new ArrayIndexOutOfBoundsException("Index = " + index + ". Допустимые границы: [0, " + (size - 1) + "].");
+            throw new IndexOutOfBoundsException("Index = " + index + ", Bounds: [0, " + (size - 1) + "]");
         }
     }
 
@@ -340,6 +320,7 @@ public class ArrayList<T> implements List<T> {
             return;
         }
 
+        ++modificationCount;
         int arrayMagnificationCoefficient = 2;
         int newArrayLength = array.length <= 5 ? 10 : array.length * arrayMagnificationCoefficient;
 
@@ -358,12 +339,12 @@ public class ArrayList<T> implements List<T> {
             return "[]";
         }
 
-        StringBuilder string = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder("[");
 
         for (int i = 0; i < size; i++) {
-            string.append("[").append(array[i]).append("],");
+            stringBuilder.append(array[i]).append(", ");
         }
 
-        return string.substring(0, string.length() - 1);
+        return stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append("]").toString();
     }
 }
