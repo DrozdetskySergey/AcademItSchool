@@ -63,6 +63,8 @@ public class List<E> {
     public void add(int index, E data) {
         if (index == size) {
             add(data);
+
+            return;
         }
 
         checkIndex(index);
