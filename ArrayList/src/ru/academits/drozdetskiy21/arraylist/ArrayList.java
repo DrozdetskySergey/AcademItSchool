@@ -24,15 +24,10 @@ public class ArrayList<T> implements List<T> {
             throw new IllegalArgumentException("Collection = NULL");
         }
 
-        size = c.size();
+        T[] collectionArray = (T[]) c.toArray();
+        size = collectionArray.length;
         array = (T[]) new Object[size];
-
-        int i = 0;
-
-        for (T t : c) {
-            array[i] = t;
-            ++i;
-        }
+        System.arraycopy(collectionArray, 0, array, 0, size);
     }
 
     @Override
@@ -70,13 +65,8 @@ public class ArrayList<T> implements List<T> {
             return (T1[]) Arrays.copyOf(array, size);
         }
 
-        for (int i = 0; i < size; i++) {
-            a[i] = (T1) array[i];
-        }
-
-        for (int i = size; i < a.length; i++) {
-            a[i] = null;
-        }
+        System.arraycopy(array, 0, a, 0, size);
+        Arrays.fill(a, size, a.length, null);
 
         return a;
     }
@@ -297,12 +287,14 @@ public class ArrayList<T> implements List<T> {
     }
 
     public void trimToSize() {
-        if (array.length > size) {
-            ++modificationCount;
-            T[] newArray = Arrays.copyOf(array, size);
-            Arrays.fill(array, null);
-            array = newArray;
+        if (array.length == size) {
+            return;
         }
+
+        ++modificationCount;
+        T[] newArray = Arrays.copyOf(array, size);
+        Arrays.fill(array, null);
+        array = newArray;
     }
 
     private void checkIndex(int index) {
