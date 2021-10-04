@@ -47,7 +47,53 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        ++modificationCount;
+
+        return new Iterator<>() {
+            private final long modificationCountValue = modificationCount;
+            private int iteratorIndex = -1;
+            private boolean isCanBeRemoved;
+
+            @Override
+            public boolean hasNext() {
+                checkModificationCount();
+
+                return size - 1 > iteratorIndex;
+            }
+
+            @Override
+            public T next() {
+                checkModificationCount();
+                ++iteratorIndex;
+                isCanBeRemoved = true;
+
+                if (iteratorIndex >= size) {
+                    throw new NoSuchElementException("No more elements.");
+                }
+
+                return array[iteratorIndex];
+            }
+
+            @Override
+            public void remove() {
+                if (!isCanBeRemoved) {
+                    throw new IllegalStateException("Illegal position for removing.");
+                }
+
+                checkModificationCount();
+                System.arraycopy(array, iteratorIndex + 1, array, iteratorIndex, (size - 1) - iteratorIndex);
+                --size;
+                array[size] = null;
+                isCanBeRemoved = false;
+                --iteratorIndex;
+            }
+
+            private void checkModificationCount() {
+                if (modificationCountValue != modificationCount) {
+                    throw new ConcurrentModificationException("List is modified.");
+                }
+            }
+        };
     }
 
     @Override

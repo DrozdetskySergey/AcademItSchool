@@ -3,11 +3,14 @@ package ru.academits.drozdetskiy21.arraylist_test;
 import ru.academits.drozdetskiy21.arraylist.ArrayList;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
         ArrayList<String> strings = new ArrayList<>();
         strings.add(0, "0");
+        strings.ensureCapacity(11);
         System.out.println(strings);
 
         strings = new ArrayList<>(0);
@@ -16,6 +19,7 @@ public class Main {
         System.out.println(strings);
 
         strings = new ArrayList<>(Arrays.asList("a", "b", "c", "d", "e"));
+        strings.trimToSize();
         System.out.println(strings);
 
         strings.addAll(2, Arrays.asList("0", "1"));
@@ -27,7 +31,7 @@ public class Main {
         strings.remove("1");
         System.out.println(strings);
 
-        strings.addAll(strings);
+        strings.addAll(new LinkedList<>(strings));
         System.out.println(strings);
 
         strings.removeAll(Arrays.asList("a", "e"));
@@ -35,5 +39,19 @@ public class Main {
 
         strings.retainAll(Arrays.asList("b", "d"));
         System.out.println(strings);
+
+        for (String s : strings) {
+            System.out.println(s);
+            for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {
+                String string = iterator.next();
+                System.out.println("-" + string);
+
+                if ("d".equals(string)) {
+                    iterator.remove();
+                }
+            }
+
+            System.out.println("#");
+        }
     }
 }
