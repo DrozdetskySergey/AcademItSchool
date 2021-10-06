@@ -3,9 +3,9 @@ package ru.academits.drozdetskiy21.arraylist;
 import java.util.*;
 
 public class ArrayList<T> implements List<T> {
-    T[] array;
-    int size;
-    long modificationCount;
+    private T[] array;
+    private int size;
+    private long modificationCount;
 
     public ArrayList() {
         array = (T[]) new Object[10];
