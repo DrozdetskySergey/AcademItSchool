@@ -314,17 +314,17 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        throw new RuntimeException("Этот метод не реализован.");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
-        throw new RuntimeException("Этот метод не реализован.");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        throw new RuntimeException("Этот метод не реализован.");
+        throw new UnsupportedOperationException();
     }
 
     public void ensureCapacity(int minCapacity) {
