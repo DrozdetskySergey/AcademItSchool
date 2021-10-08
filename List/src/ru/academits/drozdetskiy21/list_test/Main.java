@@ -38,6 +38,7 @@ public class Main {
         System.out.println();
 
         stringsList.addFirst("o");
+        stringsList.add("q");
         System.out.println(stringsList);
         System.out.println(stringsList.getFirst());
         System.out.println(stringsList.get(3));

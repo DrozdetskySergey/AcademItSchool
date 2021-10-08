@@ -1,5 +1,6 @@
 package ru.academits.drozdetskiy21.list;
 
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -10,23 +11,22 @@ public class List<E> {
     public List() {
     }
 
-    public List(java.util.List<E> list) {
+    public List(Collection<? extends E> collection) {
         Node<E> lastNode = null;
         boolean isFirstElement = true;
 
-        for (E e : list) {
+        for (E e : collection) {
             if (isFirstElement) {
-                add(e);
+                addFirst(e);
                 lastNode = head;
                 isFirstElement = false;
             } else {
-                Node<E> newNode = new Node<>(e);
-                lastNode.setNext(newNode);
-                lastNode = newNode;
+                lastNode.setNext(new Node<>(e));
+                lastNode = lastNode.getNext();
             }
         }
 
-        size = list.size();
+        size = collection.size();
     }
 
     public int getSize() {
@@ -38,7 +38,7 @@ public class List<E> {
             throw new NoSuchElementException("The first element is missing. Size: 0");
         }
 
-        return getNode(0).getData();
+        return head.getData();
     }
 
     public E get(int index) {
@@ -57,42 +57,28 @@ public class List<E> {
     }
 
     public void addFirst(E data) {
-        add(0, data);
+        head = new Node<>(data, head);
+        ++size;
     }
 
     public void add(int index, E data) {
-        if (index == size) {
-            add(data);
+        if (index == 0) {
+            addFirst(data);
 
             return;
         }
 
-        checkIndex(index);
-        Node<E> newNode = new Node<>(data);
-
-        if (index == 0) {
-            newNode.setNext(head);
-            head = newNode;
-        } else {
-            Node<E> previousNode = getNode(index - 1);
-            newNode.setNext(previousNode.getNext());
-            previousNode.setNext(newNode);
+        if (index != size) {
+            checkIndex(index);
         }
 
+        Node<E> previousNode = getNode(index - 1);
+        previousNode.setNext(new Node<>(data, previousNode.getNext()));
         ++size;
     }
 
     public void add(E data) {
-        Node<E> newNode = new Node<>(data);
-
-        if (size == 0) {
-            head = newNode;
-        } else {
-            Node<E> lastNode = getNode(size - 1);
-            lastNode.setNext(newNode);
-        }
-
-        ++size;
+        add(size, data);
     }
 
 
@@ -101,27 +87,23 @@ public class List<E> {
             throw new NoSuchElementException("The first element is missing. Size: 0");
         }
 
-        return removeNode(0);
+        E removedData = head.getData();
+        head = head.getNext();
+        --size;
+
+        return removedData;
     }
 
     public E remove(int index) {
-        checkIndex(index);
-        return removeNode(index);
-    }
-
-    private E removeNode(int index) {
-        E removedData;
-
         if (index == 0) {
-            removedData = head.getData();
-            head = head.getNext();
-        } else {
-            Node<E> previousNode = getNode(index - 1);
-            Node<E> removedNode = previousNode.getNext();
-            removedData = removedNode.getData();
-            previousNode.setNext(removedNode.getNext());
+            return removeFirst();
         }
 
+        checkIndex(index);
+        Node<E> previousNode = getNode(index - 1);
+        Node<E> removedNode = previousNode.getNext();
+        E removedData = removedNode.getData();
+        previousNode.setNext(removedNode.getNext());
         --size;
 
         return removedData;
@@ -132,9 +114,7 @@ public class List<E> {
             return false;
         }
 
-        E data = head.getData();
-
-        if (Objects.equals(o, data)) {
+        if (Objects.equals(o, head.getData())) {
             head = head.getNext();
             --size;
 
@@ -145,20 +125,14 @@ public class List<E> {
             return false;
         }
 
-        Node<E> node = head.getNext();
         Node<E> previousNode = head;
 
-        for (int i = 1; i < size; i++) {
-            data = node.getData();
-
-            if (Objects.equals(o, data)) {
+        for (Node<E> node = head.getNext(); node != null; previousNode = node, node = node.getNext()) {
+            if (Objects.equals(o, node.getData())) {
                 previousNode.setNext(node.getNext());
                 --size;
 
                 return true;
-            } else {
-                previousNode = node;
-                node = node.getNext();
             }
         }
 
@@ -195,19 +169,14 @@ public class List<E> {
             return listClone;
         }
 
-        Node<E> node = head;
-        listClone.head = new Node<>(node.getData());
-        listClone.size = 1;
-        Node<E> lastNodeClone = listClone.head;
-
-        for (int i = 1; i < size; i++) {
-            node = node.getNext();
-            Node<E> nodeClone = new Node<>(node.getData());
-            lastNodeClone.setNext(nodeClone);
-            lastNodeClone = nodeClone;
-        }
-
         listClone.size = size;
+        listClone.head = new Node<>(head.getData());
+        Node<E> nodeClone = listClone.head;
+
+        for (Node<E> node = head.getNext(); node != null; node = node.getNext()) {
+            nodeClone.setNext(new Node<>(node.getData()));
+            nodeClone = nodeClone.getNext();
+        }
 
         return listClone;
     }
@@ -239,11 +208,9 @@ public class List<E> {
         }
 
         StringBuilder stringBuilder = new StringBuilder("[");
-        Node<E> node = head;
 
-        for (int i = 0; i < size; i++) {
+        for (Node<E> node = head; node != null; node = node.getNext()) {
             stringBuilder.append(node.getData()).append(", ");
-            node = node.getNext();
         }
 
         return stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append("]").toString();
