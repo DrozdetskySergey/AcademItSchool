@@ -4,7 +4,6 @@ import ru.academits.drozdetskiy21.arraylist.ArrayList;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,7 +30,7 @@ public class Main {
         strings.remove("1");
         System.out.println(strings);
 
-        strings.addAll(new LinkedList<>(strings));
+        strings.addAll(strings);
         System.out.println(strings);
 
         strings.removeAll(Arrays.asList("a", "e"));
@@ -42,6 +41,7 @@ public class Main {
 
         for (String s : strings) {
             System.out.println(s);
+
             for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {
                 String string = iterator.next();
                 System.out.println("-" + string);
