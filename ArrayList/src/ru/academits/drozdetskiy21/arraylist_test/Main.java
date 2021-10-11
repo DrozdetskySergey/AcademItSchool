@@ -30,6 +30,7 @@ public class Main {
         strings.remove("1");
         System.out.println(strings);
 
+        //noinspection CollectionAddedToSelf
         strings.addAll(strings);
         System.out.println(strings);
 

@@ -8,6 +8,7 @@ public class ArrayList<T> implements List<T> {
     private int modificationsCount;
 
     public ArrayList() {
+        //noinspection unchecked
         elements = (T[]) new Object[10];
     }
 
@@ -16,6 +17,7 @@ public class ArrayList<T> implements List<T> {
             throw new IllegalArgumentException("Capacity: " + capacity + ", must be >= 0");
         }
 
+        //noinspection unchecked
         elements = (T[]) new Object[capacity];
     }
 
@@ -25,6 +27,7 @@ public class ArrayList<T> implements List<T> {
         }
 
         size = c.size();
+        //noinspection unchecked
         elements = (T[]) new Object[size];
 
         int i = 0;
@@ -110,9 +113,11 @@ public class ArrayList<T> implements List<T> {
         }
 
         if (a.length < size) {
+            //noinspection unchecked
             return (T1[]) Arrays.copyOf(elements, size, a.getClass());
         }
 
+        //noinspection SuspiciousSystemArraycopy
         System.arraycopy(elements, 0, a, 0, size);
         Arrays.fill(a, size, a.length, null);
 
@@ -174,6 +179,7 @@ public class ArrayList<T> implements List<T> {
         }
 
         if (c == this) {
+            //noinspection unchecked
             c = Arrays.asList((T[]) toArray());
         }
 
