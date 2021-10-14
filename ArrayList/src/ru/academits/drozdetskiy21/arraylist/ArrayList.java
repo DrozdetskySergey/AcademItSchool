@@ -56,13 +56,13 @@ public class ArrayList<T> implements List<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<>() {
-            private final int initialModificationCount = modificationsCount;
+            private final int initialModificationsCount = modificationsCount;
             private int index = -1;
             private boolean canBeRemoved;
 
             @Override
             public boolean hasNext() {
-                return size - 1 > index;
+                return size > 0 && size - index > 1;
             }
 
             @Override
@@ -94,7 +94,7 @@ public class ArrayList<T> implements List<T> {
             }
 
             private void checkModificationCount() {
-                if (initialModificationCount != modificationsCount) {
+                if (initialModificationsCount != modificationsCount) {
                     throw new ConcurrentModificationException("List is modified.");
                 }
             }
@@ -109,7 +109,7 @@ public class ArrayList<T> implements List<T> {
     @Override
     public <T1> T1[] toArray(T1[] a) {
         if (a == null) {
-            throw new NullPointerException("Specified array = null");
+            throw new NullPointerException("Specified array = NULL");
         }
 
         if (a.length < size) {
