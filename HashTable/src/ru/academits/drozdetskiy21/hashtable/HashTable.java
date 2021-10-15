@@ -57,7 +57,7 @@ public class HashTable<T> implements Collection<T> {
 
             @Override
             public boolean hasNext() {
-                return size > 0 && elements.length - index > 1;
+                return elements.length - index > 1;
             }
 
             @Override

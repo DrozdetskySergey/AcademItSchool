@@ -62,7 +62,7 @@ public class ArrayList<T> implements List<T> {
 
             @Override
             public boolean hasNext() {
-                return size > 0 && size - index > 1;
+                return size - index > 1;
             }
 
             @Override
@@ -218,7 +218,7 @@ public class ArrayList<T> implements List<T> {
         int i = 0;
 
         for (int j = 0; j < size; j++) {
-            if (c.contains(elements[j]) != isRemove) {
+            if (c.contains(elements[j]) == !isRemove) {
                 elements[i] = elements[j];
                 ++i;
             }
