@@ -45,10 +45,13 @@ public class Main {
 
             for (Iterator<String> iterator = strings.iterator(); iterator.hasNext(); ) {
                 String string = iterator.next();
-                System.out.println("-" + string);
+                System.out.print("-" + string);
 
                 if ("d".equals(string)) {
                     iterator.remove();
+                    System.out.println(" - removed");
+                } else {
+                    System.out.println();
                 }
             }
 

@@ -6,10 +6,11 @@ public class ArrayList<T> implements List<T> {
     private T[] elements;
     private int size;
     private int modificationsCount;
+    private final int DEFAULT_CAPACITY = 10;
 
     public ArrayList() {
         //noinspection unchecked
-        elements = (T[]) new Object[10];
+        elements = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayList(int capacity) {
@@ -56,7 +57,7 @@ public class ArrayList<T> implements List<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<>() {
-            private final int initialModificationsCount = modificationsCount;
+            private int initialModificationsCount = modificationsCount;
             private int index = -1;
             private boolean canBeRemoved;
 
@@ -91,6 +92,7 @@ public class ArrayList<T> implements List<T> {
                 canBeRemoved = false;
                 --index;
                 --size;
+                initialModificationsCount = ++modificationsCount;
             }
 
             private void checkModificationCount() {
@@ -119,7 +121,10 @@ public class ArrayList<T> implements List<T> {
 
         //noinspection SuspiciousSystemArraycopy
         System.arraycopy(elements, 0, a, 0, size);
-        Arrays.fill(a, size, a.length, null);
+
+        if (a.length > size) {
+            a[size] = null;
+        }
 
         return a;
     }
@@ -166,16 +171,16 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
+        if (index != size) {
+            checkIndex(index);
+        }
+
         if (c == null) {
             throw new NullPointerException("Collection = NULL");
         }
 
         if (c.size() == 0) {
             return false;
-        }
-
-        if (index != size) {
-            checkIndex(index);
         }
 
         if (c == this) {
@@ -353,8 +358,8 @@ public class ArrayList<T> implements List<T> {
             return;
         }
 
-        int arrayMagnificationCoefficient = 2;
-        int newArrayLength = elements.length <= 5 ? 10 : elements.length * arrayMagnificationCoefficient;
+        final int arrayMagnificationCoefficient = 2;
+        int newArrayLength = elements.length <= DEFAULT_CAPACITY/2 ? DEFAULT_CAPACITY : elements.length * arrayMagnificationCoefficient;
 
         while (minCapacity > newArrayLength) {
             newArrayLength *= arrayMagnificationCoefficient;
