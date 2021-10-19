@@ -96,7 +96,10 @@ public class HashTable<T> implements Collection<T> {
 
         //noinspection SuspiciousSystemArraycopy
         System.arraycopy(elements, 0, a, 0, size);
-        Arrays.fill(a, size, a.length, null);
+
+        if (a.length > size) {
+            a[size] = null;
+        }
 
         return a;
     }
@@ -194,13 +197,13 @@ public class HashTable<T> implements Collection<T> {
             throw new NullPointerException("Collection = NULL");
         }
 
-        int initialSizeValue = size;
+        final int initialSize = size;
 
         for (Object o : c) {
             remove(o);
         }
 
-        return size - initialSizeValue > 0;
+        return size - initialSize > 0;
     }
 
     @Override
@@ -209,7 +212,7 @@ public class HashTable<T> implements Collection<T> {
             throw new NullPointerException("Collection = NULL");
         }
 
-        int initialSizeValue = size;
+        final int initialSize = size;
 
         for (LinkedList<T> list : listsArray) {
             if (list != null) {
@@ -223,7 +226,7 @@ public class HashTable<T> implements Collection<T> {
             }
         }
 
-        return size - initialSizeValue > 0;
+        return size - initialSize > 0;
     }
 
     @Override
