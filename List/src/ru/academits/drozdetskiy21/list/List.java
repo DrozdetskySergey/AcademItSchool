@@ -95,11 +95,12 @@ public class List<E> {
     }
 
     public E remove(int index) {
+        checkIndex(index);
+
         if (index == 0) {
             return removeFirst();
         }
 
-        checkIndex(index);
         Node<E> previousNode = getNode(index - 1);
         Node<E> removedNode = previousNode.getNext();
         E removedData = removedNode.getData();
