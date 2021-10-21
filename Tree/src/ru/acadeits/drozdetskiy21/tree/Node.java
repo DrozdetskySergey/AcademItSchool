@@ -9,12 +9,6 @@ class Node<E> {
         this.data = data;
     }
 
-    public Node(E data, Node<E> left, Node<E> right) {
-        this.data = data;
-        this.left = left;
-        this.right = right;
-    }
-
     public E getData() {
         return data;
     }
@@ -37,5 +31,19 @@ class Node<E> {
 
     public void setRight(Node<E> right) {
         this.right = right;
+    }
+
+    public void copy(Node<E> node) {
+        data = node.data;
+        left = node.left;
+        right = node.right;
+    }
+
+    public void copyLeft() {
+        copy(left);
+    }
+
+    public void copyRight() {
+        copy(right);
     }
 }
