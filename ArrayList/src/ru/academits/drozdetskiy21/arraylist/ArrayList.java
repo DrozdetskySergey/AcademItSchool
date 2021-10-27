@@ -6,7 +6,7 @@ public class ArrayList<T> implements List<T> {
     private T[] elements;
     private int size;
     private int modificationsCount;
-    private final int DEFAULT_CAPACITY = 10;
+    private final static int DEFAULT_CAPACITY = 10;
 
     public ArrayList() {
         //noinspection unchecked
@@ -92,7 +92,8 @@ public class ArrayList<T> implements List<T> {
                 canBeRemoved = false;
                 --index;
                 --size;
-                initialModificationsCount = ++modificationsCount;
+                ++modificationsCount;
+                initialModificationsCount = modificationsCount;
             }
 
             private void checkModificationCount() {
@@ -359,7 +360,7 @@ public class ArrayList<T> implements List<T> {
         }
 
         final int arrayMagnificationCoefficient = 2;
-        int newArrayLength = elements.length <= DEFAULT_CAPACITY/2 ? DEFAULT_CAPACITY : elements.length * arrayMagnificationCoefficient;
+        int newArrayLength = elements.length <= DEFAULT_CAPACITY / 2 ? DEFAULT_CAPACITY : elements.length * arrayMagnificationCoefficient;
 
         while (minCapacity > newArrayLength) {
             newArrayLength *= arrayMagnificationCoefficient;
