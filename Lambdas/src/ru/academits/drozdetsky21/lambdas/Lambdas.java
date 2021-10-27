@@ -47,7 +47,7 @@ public class Lambdas {
         // Г. при помощи группировки получить Map, в котором ключи имена, а значения средний возраст
         persons.stream()
                 .collect(Collectors.groupingBy(Person::getName, Collectors.averagingInt(Person::getAge)))
-                .forEach((s, d) -> System.out.printf("%s - %s%n", s, d));
+                .forEach((n, a) -> System.out.printf("%s - %s%n", n, a));
 
         System.out.println();
 
@@ -74,7 +74,8 @@ public class Lambdas {
 
         // ** Попробовать реализовать бесконечный поток чисел Фиббоначчи
         Stream.iterate(new int[]{0, 1}, n -> new int[]{n[1], n[0] + n[1]})
-                .limit(5)
-                .forEach(e -> System.out.println(e[0]));
+                .mapToInt(e -> e[0])
+                .limit(9)
+                .forEach(System.out::println);
     }
 }
